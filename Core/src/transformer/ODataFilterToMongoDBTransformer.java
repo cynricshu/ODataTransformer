@@ -252,7 +252,7 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
 
         BasicDBObject generateMongoDBQuery() {
             String finString = generateMongoDBQuery(AST.root);
-            query.append("$where", "function() {return " + finString + "}");
+            query.append("$where", finString);
             return query;
         }
 

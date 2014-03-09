@@ -4,10 +4,10 @@ import org.odata4j.expression.*;
 import org.odata4j.expression.OrderByExpression.Direction;
 import org.odata4j.repack.org.apache.commons.codec.binary.Hex;
 import transformer.ODataFilterToHQLWhereClauseTransformer.HQLWhereClauseExpressionVisitor.generator;
+import util.Node;
+import util.Tree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ODataFilterToHQLWhereClauseTransformer implements
@@ -44,25 +44,6 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         boolean boolExpression = false;
 
         boolean simpleOperation = true;
-
-        class Tree<T> {
-
-            public Node<T> root;
-
-            public Tree(T rootData) {
-                root = new Node<T>();
-                root.data = rootData;
-                root.children = new ArrayList<Node<T>>();
-            }
-        }
-
-        class Node<T> {
-            public T data;
-            public Node<T> parent;
-            public List<Node<T>> children = new ArrayList<Node<T>>();
-            public StringBuilder QueryObject = new StringBuilder();
-        }
-
 
         public HQLWhereClauseExpressionVisitor() {
             if (generateMatchTable.size() == 0) {
