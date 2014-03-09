@@ -1,3 +1,5 @@
+package bootstrap;
+
 import transformer.DataTransformer;
 import transformer.ODataFilterToMongoDBTransformer;
 

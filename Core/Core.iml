@@ -22,7 +22,9 @@
           <root url="jar://$MODULE_DIR$/lib/odata4j-0.7.0-core.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../../java-libs/odata4j-archive-0.7/odata4j/odata4j-core-0.7.0-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
