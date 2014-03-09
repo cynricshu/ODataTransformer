@@ -1,5 +1,5 @@
 import transformer.DataTransformer;
-import transformer.ODataFilterToHQLWhereClauseTransformer;
+import transformer.ODataFilterToMongoDBTransformer;
 
 import java.util.Scanner;
 
@@ -12,14 +12,16 @@ public class Bootstrap {
     public static void main(String[] args) {
 
         Scanner in = new Scanner(System.in);
+        DataTransformer transformer = new ODataFilterToMongoDBTransformer();
 
         while (in.hasNextLine()) {
-            String filter = in.nextLine();
+            String filterString = in.nextLine();
 
-            DataTransformer transformer = new ODataFilterToHQLWhereClauseTransformer();
-            String hqlWhereClause = transformer.transform(filter, null);
-
-            System.out.println(hqlWhereClause);
+            if (filterString != null && !"".equals(filterString)) {
+                System.out.println(transformer.transform(filterString, null));
+            } else {
+                System.out.println("no input");
+            }
         }
     }
 }

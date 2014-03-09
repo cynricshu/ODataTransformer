@@ -13,18 +13,15 @@ import java.util.Map;
 public class ODataFilterToHQLWhereClauseTransformer implements
         DataTransformer {
 
-    static final Map<String, generator> generateMatchTable = new HashMap<String, generator>();
+    static final Map<String, generator> generateMatchTable = new HashMap<>();
 
     @Override
     public String transform(String inputData, Object[] params) {
         CommonExpression expression = ExpressionParser.parse(inputData);
         HQLWhereClauseExpressionVisitor visitor = new HQLWhereClauseExpressionVisitor();
-        // PrintExpressionVisitor visitor = new PrintExpressionVisitor();
         expression.visit(visitor);
 
-        // generateMongodb mongdb=new generateMongodb();
         String hqlWhereClause = visitor.generateHQLWhereClause();
-        // mongdb.generateMongoDBQuery(visitor.getAST(),visitor.simpleOperation);
         return hqlWhereClause;
     }
 
@@ -39,9 +36,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
     }
 
     class HQLWhereClauseExpressionVisitor implements org.odata4j.expression.ExpressionVisitor {
-        // private Tree.Node<String> treeCurrentNode=AST.root;
         StringBuilder query = new StringBuilder();
-        StringBuilder anotherQueryString = new StringBuilder();
         Tree<Object> AST = new Tree("");
 
         Node<Object> currentNode = AST.root;
@@ -66,7 +61,6 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public Node<T> parent;
             public List<Node<T>> children = new ArrayList<Node<T>>();
             public StringBuilder QueryObject = new StringBuilder();
-            // public StringBuilder jsString=new StringBuilder();
         }
 
 
@@ -131,7 +125,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class substringTwoParameter extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public substringTwoParameter() {
                 replaceTable.put("substring", new String[]{"substring(", ")"});
@@ -153,7 +147,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class rootRightLeft extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public rootRightLeft() {
                 replaceTable.put("indexof", new String[]{"charindex(", ")-1"});
@@ -172,7 +166,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class concatGenertor extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public concatGenertor() {
                 replaceTable.put("concat", new String[]{"concat(", ")"});
@@ -191,7 +185,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class rootLeftRight extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public rootLeftRight() {
                 replaceTable.put("startswith", new String[]{"charindex(", ")=1"});
@@ -211,7 +205,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class rootLeft extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public rootLeft() {
                 replaceTable.put("ceiling", new String[]{"ceiling(", ")"});
@@ -234,22 +228,16 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class leftRoot extends generator {
-            Map<String, String> replaceTable = new HashMap<String, String>();
+            Map<String, String> replaceTable = new HashMap<>();
 
             public leftRoot() {
                 replaceTable.put("length", ".size");
-                // replaceTable.put("day", "CURRENT_DATE() ");
-                // replaceTable.put("month", "month()+1 ");
-                // replaceTable.put("year", "year() ");
-                // replaceTable.put("minute", "minute() ");
-                // replaceTable.put("second", "second(CURRENT_()) ");
-                // replaceTable.put("hour", "hour(CURRENT_TIME()) ");
                 replaceTable.put("boolparen", "");
             }
 
             @Override
             public String generateQueryString(Node<Object> root) {
-                // TODO Auto-generated method stub
+
                 String parameter = replaceTable.get(root.data.toString());
                 String queryString = generateMongoDBQuery(root.children.get(0))
                         + parameter;
@@ -259,10 +247,9 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class timeFunction extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public timeFunction() {
-                // replaceTable.put("length", ".size");
                 replaceTable.put("length", new String[]{"length(", ")"});
 
                 replaceTable.put("day", new String[]{"day(", ")"});
@@ -271,12 +258,11 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 replaceTable.put("minute", new String[]{"minute(", ")"});
                 replaceTable.put("second", new String[]{"second(", ")"});
                 replaceTable.put("hour", new String[]{"hour(", ")"});
-                // replaceTable.put("boolparen", "");
             }
 
             @Override
             public String generateQueryString(Node<Object> root) {
-                // TODO Auto-generated method stub
+
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = " " + parameters[0]
                         + generateMongoDBQuery(root.children.get(0))
@@ -287,13 +273,9 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class leftRootRight extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public leftRootRight() {
-                // replaceTable.put("concat", new String[]{"(",")"});
-                // replaceTable.put("substring", new String[]{"charindex(",")"});
-                // replaceTable.put("indexof", new String[]{"index(",")"});
-
                 replaceTable.put("add", new String[]{"+", ""});
                 replaceTable.put("mul", new String[]{"*", ""});
                 replaceTable.put("mod", new String[]{"%", ""});
@@ -331,7 +313,6 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                     } else {
                         queryString = " " + generateMongoDBQuery(root.children.get(0));
 
-                        //	 System.out.print(queryString);
                     }
                 } else {
                     queryString = " " + generateMongoDBQuery(root.children.get(0)) + " " + parameters[0] + generateMongoDBQuery(root.children.get(1));
@@ -342,7 +323,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class RightRootLeft extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public RightRootLeft() {
                 replaceTable.put("substringof", new String[]{"charindex(",
@@ -361,7 +342,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class endsWith extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public endsWith() {
                 replaceTable.put("endswith", new String[]{"substring(", ",length(", ")-length(", ")+1,length(", "))="});
@@ -379,7 +360,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         class leftRootRightThreeParameters extends generator {
-            Map<String, String[]> replaceTable = new HashMap<String, String[]>();
+            Map<String, String[]> replaceTable = new HashMap<>();
 
             public leftRootRightThreeParameters() {
                 replaceTable.put("substring", new String[]{"substring(", ",",
@@ -426,12 +407,6 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         String generateHQLWhereClause() {
-            // BasicDBObject query=new BasicDBObject();
-            // if(simpleOperation)
-            // mongoPostNode(AST.root);
-            // else
-            // {
-            // mongoMidNode(AST.root);
             String finString = generateMongoDBQuery(AST.root);
             query.append(finString);
 
@@ -452,16 +427,15 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
         @Override
         public void beforeDescend() {
-            Node<Object> newNode = new Node<Object>();
+            Node<Object> newNode = new Node<>();
             newNode.parent = currentNode;
-            // newNode.children=new ArrayList<Node<Object>>();
             currentNode.children.add(newNode);
             currentNode = newNode;
         }
 
         @Override
         public void betweenDescend() {
-            Node<Object> newNode = new Node<Object>();
+            Node<Object> newNode = new Node<>();
             newNode.parent = currentNode.parent;
             currentNode.parent.children.add(newNode);
             currentNode = newNode;
@@ -475,74 +449,72 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
         @Override
         public void visit(OrderByExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "orderBy";
 
         }
 
         @Override
         public void visit(AddExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "add";
             simpleOperation = false;
         }
 
         @Override
         public void visit(AndExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "and";
         }
 
         @Override
         public void visit(BooleanLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
 
         }
 
         @Override
         public void visit(CastExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "cast";
 
         }
 
         @Override
         public void visit(ConcatMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "concat";
 
         }
 
         @Override
         public void visit(DateTimeLiteral arg0) {
-            // TODO Auto-generated method stub
-            /*new add*/
             currentNode.data = "'" + arg0.getValue() + "'";
         }
 
         @Override
         public void visit(DateTimeOffsetLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "'" + arg0.getValue() + "'";
         }
 
         @Override
         public void visit(DecimalLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(DivExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "div";
             simpleOperation = false;
         }
 
         @Override
         public void visit(EndsWithMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "endswith";
 
         }
@@ -565,172 +537,172 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
         @Override
         public void visit(GeExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "ge";
 
         }
 
         @Override
         public void visit(GtExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "gt";
 
         }
 
         @Override
         public void visit(GuidLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(BinaryLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = Hex.encodeHexString(arg0.getValue());
 
         }
 
         @Override
         public void visit(ByteLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(SByteLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(IndexOfMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "indexof";
 
         }
 
         @Override
         public void visit(Direction arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = (arg0 == Direction.ASCENDING ? "asc" : "desc");
         }
 
         @Override
         public void visit(SingleLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(DoubleLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(IntegralLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(Int64Literal arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue();
         }
 
         @Override
         public void visit(IsofExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "isof";
 
         }
 
         @Override
         public void visit(LeExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "le";
         }
 
         @Override
         public void visit(LengthMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "length";
 
         }
 
         @Override
         public void visit(LtExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "lt";
         }
 
         @Override
         public void visit(ModExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "mod";
             simpleOperation = false;
         }
 
         @Override
         public void visit(MulExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "mul";
             simpleOperation = false;
         }
 
         @Override
         public void visit(NeExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "ne";
         }
 
         @Override
         public void visit(NegateExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "negate";
         }
 
         @Override
         public void visit(NotExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "not";
         }
 
         @Override
         public void visit(NullLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "null";
         }
 
         @Override
         public void visit(OrExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "or";
         }
 
         @Override
         public void visit(ParenExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "paren";
         }
 
         @Override
         public void visit(BoolParenExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "boolparen";
         }
 
         @Override
         public void visit(ReplaceMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "replace";
 
         }
 
         @Override
         public void visit(StartsWithMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "startswith";
 
         }
@@ -742,111 +714,111 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
         @Override
         public void visit(SubExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "sub";
         }
 
         @Override
         public void visit(SubstringMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "substring";
 
         }
 
         @Override
         public void visit(SubstringOfMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "substringof";
 
         }
 
         @Override
         public void visit(TimeLiteral arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getValue().toString(
                     ExpressionParser.TIME_FORMATTER);
         }
 
         @Override
         public void visit(ToLowerMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "tolower";
 
         }
 
         @Override
         public void visit(ToUpperMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "toupper";
 
         }
 
         @Override
         public void visit(TrimMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "trim";
 
         }
 
         @Override
         public void visit(YearMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "year";
         }
 
         @Override
         public void visit(MonthMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "month";
         }
 
         @Override
         public void visit(DayMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "day";
         }
 
         @Override
         public void visit(HourMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "hour";
         }
 
         @Override
         public void visit(MinuteMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "minute";
         }
 
         @Override
         public void visit(SecondMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "second";
         }
 
         @Override
         public void visit(RoundMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "round";
 
         }
 
         @Override
         public void visit(FloorMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "floor";
 
         }
 
         @Override
         public void visit(CeilingMethodCallExpression arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = "ceiling";
         }
 
         @Override
         public void visit(AggregateAnyFunction arg0) {
-            // TODO Auto-generated method stub
+
             if (arg0.getVariable() != null) {
                 currentNode.data = arg0.getVariable();
             } else {
@@ -856,7 +828,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
         @Override
         public void visit(AggregateAllFunction arg0) {
-            // TODO Auto-generated method stub
+
             currentNode.data = arg0.getVariable();
         }
 

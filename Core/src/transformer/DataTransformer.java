@@ -6,7 +6,7 @@ package transformer;
  * Time: 9:45
  */
 public interface DataTransformer {
-    String transform(String inputData, Object[] params);
+    <T> T transform(String inputData, Object[] params);
 
     String getSourceTypeName();
 
