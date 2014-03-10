@@ -124,10 +124,10 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
             Map<String, String> replaceTable = new HashMap<>();
 
             public leftRoot() {
-                replaceTable.put("length", ".length");
-                replaceTable.put("tolower", ".toLowerCase()");
-                replaceTable.put("toUpper", ".toUpperCase()");
-                replaceTable.put("trim", ".replace(' ','')");
+                replaceTable.put("length", ".length ");
+                replaceTable.put("tolower", ".toLowerCase() ");
+                replaceTable.put("toupper", ".toUpperCase() ");
+                replaceTable.put("trim", ".trim() ");
                 replaceTable.put("day", ".getDate() ");
                 replaceTable.put("month", ".getMonth() + 1 ");
                 replaceTable.put("year", ".getFullYear() ");
@@ -151,7 +151,7 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
             Map<String, String[]> replaceTable = new HashMap<>();
 
             public leftRootRight() {
-                replaceTable.put("concat", new String[]{"(", ")"});
+                replaceTable.put("concat", new String[]{".concat(", ")"});
                 replaceTable.put("substring", new String[]{".substring(", ")"});
                 replaceTable.put("indexof", new String[]{".indexOf(", ")"});
                 replaceTable.put("startswith", new String[]{".indexOf(", ") == 0"});
@@ -232,7 +232,7 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
             @Override
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
-                String queryString = generateMongoDBQuery(root.children.get(1)) + parameters[0]
+                String queryString = generateMongoDBQuery(root.children.get(0)) + parameters[0]
                         + generateMongoDBQuery(root.children.get(1))
                         + parameters[1] + generateMongoDBQuery(root.children.get(2)) + parameters[2];
                 return queryString;

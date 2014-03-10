@@ -24,13 +24,18 @@ import java.util.List;
  * Date: 14-3-9
  * Time: 16:17
  */
-public class MongodbDatasource {
-    static String _serverAddress = "127.0.0.1";
-    static String _databaseName = "transformer";
+public class MongodbDatasource implements Datasource {
+    private String _serverAddress;
+    private String _databaseName;
     private Mongo _mongo;
 
     private void thrownMongoException() {
 
+    }
+
+    public MongodbDatasource(String serverAddress, String databaseName) {
+        this._serverAddress = serverAddress;
+        this._databaseName = databaseName;
     }
 
     public Mongo getMongo() {
@@ -75,7 +80,7 @@ public class MongodbDatasource {
                 DataTransformer transformer = new ODataFilterToMongoDBTransformer();
                 query = transformer.transform(filterString, null);
 
-                System.out.println(query.toString());
+//                System.out.println(query.toString());
 
             } catch (JSONException e) {
                 e.printStackTrace();
