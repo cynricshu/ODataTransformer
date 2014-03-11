@@ -40,7 +40,6 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
 
     class MongoDBQueryGenerator implements org.odata4j.expression.ExpressionVisitor {
         BasicDBObject query = new BasicDBObject();
-        StringBuilder anotherQueryString = new StringBuilder();
         Tree<Object> AST = new Tree("");
 
         Node<Object> currentNode = AST.root;
@@ -61,10 +60,10 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
                 generateMatchTable.put("not,1", rootLeftGenerator);
                 generateMatchTable.put("trim,1", leftRootGenerator);
                 generateMatchTable.put("tolower,1", leftRootGenerator);
-                generateMatchTable.put("boolparen,1", leftRootGenerator);
                 generateMatchTable.put("toupper,1", leftRootGenerator);
                 generateMatchTable.put("length,1", leftRootGenerator);
-                generateMatchTable.put("paren,1", leftRootRightGenerator);
+                generateMatchTable.put("boolparen,1", leftRootGenerator);
+                generateMatchTable.put("paren,1", leftRootGenerator);
                 generateMatchTable.put("and,2", leftRootRightGenerator);
                 generateMatchTable.put("or,2", leftRootRightGenerator);
                 generateMatchTable.put("add,2", leftRootRightGenerator);
@@ -135,13 +134,18 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
                 replaceTable.put("second", ".getSeconds() ");
                 replaceTable.put("hour", ".getHours() ");
                 replaceTable.put("boolparen", "");
+                replaceTable.put("paren", "");
             }
 
             @Override
             public String generateQueryString(Node<Object> root) {
-
+                String queryString;
                 String parameter = replaceTable.get(root.data.toString());
-                String queryString = generateMongoDBQuery(root.children.get(0)) + parameter;
+                if ("boolparen".equals(root.data.toString()) || "paren".equals(root.data.toString())) {
+                    queryString = "(" + generateMongoDBQuery(root.children.get(0)) + parameter + ")";
+                } else {
+                    queryString = generateMongoDBQuery(root.children.get(0)) + parameter;
+                }
                 return queryString;
             }
 
@@ -168,20 +172,15 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
                 replaceTable.put("ge", new String[]{" >= ", ""});
                 replaceTable.put("lt", new String[]{" < ", ""});
                 replaceTable.put("le", new String[]{" <= ", ""});
-                replaceTable.put("paren", new String[]{"", ""});
             }
 
             @Override
             public String generateQueryString(Node<Object> root) {
                 String queryString;
                 String[] parameters = replaceTable.get(root.data.toString());
-                if ("paren".equals(root.data.toString())) {
-                    queryString = "(" + generateMongoDBQuery(root.children.get(0)) + ")";
-                } else {
-                    queryString = generateMongoDBQuery(root.children.get(0)) + parameters[0]
-                            + generateMongoDBQuery(root.children.get(1))
-                            + parameters[1];
-                }
+                queryString = generateMongoDBQuery(root.children.get(0)) + parameters[0]
+                        + generateMongoDBQuery(root.children.get(1))
+                        + parameters[1];
                 return queryString;
             }
         }

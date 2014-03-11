@@ -1,8 +1,6 @@
 package bootstrap;
 
-import test.mongo.CreateTest;
 import test.mongo.QueryTest;
-import util.GenData;
 
 /**
  * User: Cynric
@@ -14,8 +12,11 @@ public class Bootstrap {
 
     public static void main(String[] args) {
 //        new CreateTest().insertData();
+        String filterString = "(Age add 5) eq 15";
+        QueryTest queryTest = new QueryTest();
         try {
-            new QueryTest().testTrim();
+            queryTest.test(filterString);
+//            queryTest.testEndswith();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -81,7 +81,6 @@ public class MongodbDatasource implements Datasource {
                 query = transformer.transform(filterString, null);
 
 //                System.out.println(query.toString());
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

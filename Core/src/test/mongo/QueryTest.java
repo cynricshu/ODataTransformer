@@ -25,6 +25,18 @@ public class QueryTest {
         datasource = new MongodbDatasource("127.0.0.1", "transformer");
     }
 
+    public void test(String filterString) throws Exception {
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") <= 25);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
     @Test
     public void testEq() throws Exception {
         String filterString = "Name eq 'Cynric'";
@@ -76,6 +88,104 @@ public class QueryTest {
         for (int i = 0; i < resultList.length(); i++) {
             BasicDBObject entity = (BasicDBObject) resultList.get(i);
             assertTrue(entity.getInt("Age") >= 22 || entity.getString("Name").equals("Cynric"));
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testNot() throws Exception {
+        String filterString = "not Age ge 22 or Name eq 'Cynric'";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") < 22 || entity.getString("Name").equals("Cynric"));
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testNot2() throws Exception {
+        String filterString = "not (Age ge 50 or Name ne 'Cynric')";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") < 50 && entity.getString("Name").equals("Cynric"));
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testAdd() throws Exception {
+        String filterString = "Age add 5 gt 20";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") > 15);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testSub() throws Exception {
+        String filterString = "Age sub 5 lt 20";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") < 25);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testMul() throws Exception {
+        String filterString = "Age mul 2 le 50";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") <= 25);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testDiv() throws Exception {
+        String filterString = "(Age div 2) ne 20";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(entity.getInt("Age") != 40);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testMod() throws Exception {
+        String filterString = "(Age add 2)mod 2 ne 0";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue((entity.getInt("Age") % 2) != 0);
         }
         System.out.println("Test Pass for Mongo$filter: " + filterString);
     }
