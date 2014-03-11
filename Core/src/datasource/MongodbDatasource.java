@@ -72,6 +72,7 @@ public class MongodbDatasource implements Datasource {
         return entityObject;
     }
 
+    @Override
     public JSONArray query(String modelName, JSONObject queryParameters) {
         BasicDBObject query = new BasicDBObject();
         int skip = 0;
@@ -114,7 +115,7 @@ public class MongodbDatasource implements Datasource {
             cursor = cursor.limit(top);
         }
 
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray = new JSONArray(cursor.length());
         for (DBObject dbObject : cursor) {
             jsonArray.put(dbObject);
         }
@@ -123,7 +124,8 @@ public class MongodbDatasource implements Datasource {
         return jsonArray;
     }
 
-    public ObjectId create(String modelName, JSONObject entry) {
+    @Override
+    public Object create(String modelName, JSONObject entry) {
 
         DBCollection coll = getDB().getCollection(modelName);
         int result = 0;
@@ -144,17 +146,21 @@ public class MongodbDatasource implements Datasource {
         return objId;
     }
 
-    public int create(String modelName, JSONArray entries) {
+    @Override
+    public Object[] create(String modelName, JSONArray entries) {
 
         DBCollection coll = getDB().getCollection(modelName);
-        int result = 0;
+        Object[] objects = new Object[entries.length()];
 
-        List<DBObject> list = new ArrayList<DBObject>();
+        List<DBObject> list = new ArrayList<>();
         for (int i = 0; i < entries.length(); i++) {
             DBObject o;
+            ObjectId objId = new ObjectId();
             try {
-                JSONObject json = (JSONObject) entries.get(i);
-                o = new BasicDBObject(json.getMap());
+                JSONObject entry = (JSONObject) entries.get(i);
+                o = new BasicDBObject(entry.getMap());
+                o.put("_id", objId);
+                objects[i] = objId;
                 list.add(o);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -162,15 +168,14 @@ public class MongodbDatasource implements Datasource {
         }
 
         WriteResult writeResult = coll.insert(list, WriteConcern.SAFE);
-        if (writeResult.getError() == null) {
-            result = writeResult.getN();
-        } else {
+        if (writeResult.getError() != null) {
             thrownMongoException();
         }
         closeMongo();
-        return result;
+        return objects;
     }
 
+    @Override
     public int update(String modelName, JSONObject queryParameters, JSONObject entry) {
 
         DBCollection coll = getDB().getCollection(modelName);
@@ -214,6 +219,7 @@ public class MongodbDatasource implements Datasource {
         return result;
     }
 
+    @Override
     public int delete(String modelName, JSONObject queryParameters) {
         DBCollection coll = getDB().getCollection(modelName);
         BasicDBObject query = new BasicDBObject();

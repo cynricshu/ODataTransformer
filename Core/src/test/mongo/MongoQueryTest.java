@@ -1,9 +1,8 @@
 package test.mongo;
 
 import com.mongodb.BasicDBObject;
-import datasource.Datasource;
-import datasource.MongodbDatasource;
 import org.junit.Test;
+import test.hibernate.HibernateCreateTest;
 import util.json.JSONArray;
 import util.json.JSONException;
 import util.json.JSONObject;
@@ -18,12 +17,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 14-3-10
  * Time: 9:52
  */
-public class MongoQueryTest {
-    private Datasource datasource;
-
-    public MongoQueryTest() {
-        datasource = new MongodbDatasource("127.0.0.1", "transformer");
-    }
+public class MongoQueryTest extends MongoTest {
 
     public void test(String filterString) throws Exception {
 

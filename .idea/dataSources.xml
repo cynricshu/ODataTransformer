@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="3119061372">
+    <data-source source="LOCAL" name="conf:hibernate.cfg.xml" uuid="32e64795-40f8-48e6-b296-cd57e8e6a183">
+      <driver-ref>hsqldb.remote</driver-ref>
+      <jdbc-driver>org.hsqldb.jdbcDriver</jdbc-driver>
+      <jdbc-url>jdbc:hsqldb:hsql://localhost</jdbc-url>
+      <user-name>sa</user-name>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+

@@ -97,6 +97,13 @@ public class JSONArray {
     }
 
     /**
+     * Construct an JSONArray with the given length.
+     */
+    public JSONArray(int length) {
+        this.myArrayList = new ArrayList(length);
+    }
+
+    /**
      * Construct a JSONArray from a JSONTokener.
      *
      * @param x A JSONTokener

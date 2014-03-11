@@ -1,5 +1,9 @@
 package util;
 
+import util.json.JSONArray;
+import util.json.JSONException;
+import util.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -62,5 +66,50 @@ public class GenData {
             builder.append((char) (ThreadLocalRandom.current().nextInt(97, 123)));
         }
         return builder.toString();
+    }
+
+    public static JSONObject genPeople() {
+        JSONObject people = new JSONObject();
+        try {
+            people.put("Name", GenData.genString(6));
+            people.put("Age", GenData.genAge(1, 100));
+            people.put("Year", GenData.genYear(1970, 2015));
+            people.put("BirthDate", GenData.genDate("1970-01-01", "2014-12-30"));
+            people.put("Height", GenData.random(155.0, 200.0));
+            people.put("Description", "other");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return people;
+    }
+
+    public static JSONObject genPeopleMe() {
+        JSONObject me = new JSONObject();
+        try {
+            me.put("Name", "Cynric");
+            me.put("Age", 22);
+            me.put("Year", 1992);
+            me.put("BirthDate", new Date(701293600000L));
+            me.put("Description", "me");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return me;
+    }
+
+    public static JSONArray genPeopleList(int length) {
+        JSONArray peoples = new JSONArray(length);
+        for (int i = 0; i < length; i++) {
+            JSONObject people = GenData.genPeople();
+            if (i == 0) {
+                try {
+                    people.put("Name", " Bye bye ");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            peoples.put(people);
+        }
+        return peoples;
     }
 }

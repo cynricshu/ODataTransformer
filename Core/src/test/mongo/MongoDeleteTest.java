@@ -1,7 +1,5 @@
 package test.mongo;
 
-import datasource.Datasource;
-import datasource.MongodbDatasource;
 import util.json.JSONException;
 import util.json.JSONObject;
 
@@ -10,17 +8,12 @@ import util.json.JSONObject;
  * Date: 14-3-10
  * Time: 9:41
  */
-public class MongoDeleteTest {
-    private Datasource datasource;
-
-    public MongoDeleteTest() {
-        datasource = new MongodbDatasource("127.0.0.1", "transformer");
-    }
+public class MongoDeleteTest extends MongoTest {
 
     public void deleteData() {
         JSONObject queryParameters = new JSONObject();
         try {
-            queryParameters.put("$filter", "Name ne 'Cynric'");
+            queryParameters.put("$filter", "Name ne 'Cynric' or Name ne ' Bye bye '");
         } catch (JSONException e) {
             e.printStackTrace();
         }
