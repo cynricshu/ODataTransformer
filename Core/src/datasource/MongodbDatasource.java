@@ -74,41 +74,47 @@ public class MongodbDatasource implements Datasource {
 
     public JSONArray query(String modelName, JSONObject queryParameters) {
         BasicDBObject query = new BasicDBObject();
-        if (queryParameters.has("$filter")) {
-            try {
-                String filterString = queryParameters.getString("$filter");
-                DataTransformer transformer = new ODataFilterToMongoDBTransformer();
-                query = transformer.transform(filterString, null);
+        int skip = 0;
+        int top = 0;
+
+        if (queryParameters != null) {
+            if (queryParameters.has("$filter")) {
+                try {
+                    String filterString = queryParameters.getString("$filter");
+                    DataTransformer transformer = new ODataFilterToMongoDBTransformer();
+                    query = transformer.transform(filterString, null);
 
 //                System.out.println(query.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            try {
+                if (queryParameters.has("$skip")) {
+                    skip = queryParameters.getInt("$skip");
+                }
+                if (queryParameters.has("$top")) {
+                    top = queryParameters.getInt("$top");
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        int skip = 0;
-        int top = 0;
-        try {
-            if (queryParameters.has("$skip")) {
-                skip = queryParameters.getInt("$skip");
-            }
-            if (queryParameters.has("$top")) {
-                top = queryParameters.getInt("$top");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         DBCollection coll = getDB().getCollection(modelName);
         DBCursor cursor = coll.find(query);
 
-        JSONArray jsonArray = new JSONArray();
-        cursor = cursor.skip(skip);
 
+        if (skip != 0) {
+            cursor = cursor.skip(skip);
+        }
         if (top != 0) {
             cursor = cursor.limit(top);
         }
 
+        JSONArray jsonArray = new JSONArray();
         for (DBObject dbObject : cursor) {
             jsonArray.put(dbObject);
         }
@@ -171,25 +177,25 @@ public class MongodbDatasource implements Datasource {
         BasicDBObject query = new BasicDBObject();
         int result = 0;
 
-        if (queryParameters.has("$filter")) {
-            try {
-                String filterString = queryParameters.getString("$filter");
-                DataTransformer transformer = new ODataFilterToMongoDBTransformer();
-                query = transformer.transform(filterString, null);
+        if (queryParameters != null) {
+            if (queryParameters.has("$filter")) {
+                try {
+                    String filterString = queryParameters.getString("$filter");
+                    DataTransformer transformer = new ODataFilterToMongoDBTransformer();
+                    query = transformer.transform(filterString, null);
 
-                System.out.println(query.toString());
+                    System.out.println(query.toString());
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    query.put("_id", new ObjectId(queryParameters.getString("_id")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
-            ObjectId _id = null;
-            try {
-                _id = new ObjectId(entry.getString("_id"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            query.put("_id", _id);
         }
 
         entry.remove("_id");
@@ -213,7 +219,7 @@ public class MongodbDatasource implements Datasource {
         BasicDBObject query = new BasicDBObject();
         int result = 0;
 
-        if (queryParameters.has("$filter")) {
+        if (queryParameters != null && queryParameters.has("$filter")) {
             try {
                 String filterString = queryParameters.getString("$filter");
                 DataTransformer transformer = new ODataFilterToMongoDBTransformer();

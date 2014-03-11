@@ -18,10 +18,10 @@ import static org.junit.Assert.assertTrue;
  * Date: 14-3-10
  * Time: 9:52
  */
-public class QueryTest {
+public class MongoQueryTest {
     private Datasource datasource;
 
-    public QueryTest() {
+    public MongoQueryTest() {
         datasource = new MongodbDatasource("127.0.0.1", "transformer");
     }
 
@@ -178,7 +178,7 @@ public class QueryTest {
 
     @Test
     public void testMod() throws Exception {
-        String filterString = "(Age add 2)mod 2 ne 0";
+        String filterString = "(Age add 2) mod 2 ne 0";
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -389,6 +389,96 @@ public class QueryTest {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(entity.getDate("BirthDate"));
             assertTrue(calendar.get(Calendar.DAY_OF_MONTH) == 22);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testHour() throws Exception {
+        String filterString = "hour(BirthDate) eq 10";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(entity.getDate("BirthDate"));
+            assertTrue(calendar.get(Calendar.HOUR_OF_DAY) == 10);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testMinute() throws Exception {
+        String filterString = "minute(BirthDate) eq 58";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(entity.getDate("BirthDate"));
+            assertTrue(calendar.get(Calendar.MINUTE) == 58);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testSecond() throws Exception {
+        String filterString = "second(BirthDate) eq 31";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(entity.getDate("BirthDate"));
+            assertTrue(calendar.get(Calendar.SECOND) == 31);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testFloor() throws Exception {
+        String filterString = "floor(Height) eq 170";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(Math.floor(entity.getDouble("Height")) == 170);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testRound() throws Exception {
+        String filterString = "round(Height) eq 165";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(Math.round(entity.getDouble("Height")) == 165);
+        }
+        System.out.println("Test Pass for Mongo$filter: " + filterString);
+    }
+
+    @Test
+    public void testCeiling() throws Exception {
+        String filterString = "ceiling(Height) eq 160";
+
+        JSONArray resultList = getResult(filterString);
+        assertTrue("no match result entity!", resultList.length() > 0);
+
+        for (int i = 0; i < resultList.length(); i++) {
+            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+            assertTrue(Math.ceil(entity.getDouble("Height")) == 160);
         }
         System.out.println("Test Pass for Mongo$filter: " + filterString);
     }

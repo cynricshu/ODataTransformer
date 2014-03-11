@@ -1,6 +1,6 @@
 package bootstrap;
 
-import test.mongo.QueryTest;
+import test.mongo.MongoCreateTest;
 
 /**
  * User: Cynric
@@ -11,15 +11,21 @@ public class Bootstrap {
 
 
     public static void main(String[] args) {
-//        new CreateTest().insertData();
-        String filterString = "(Age add 5) eq 15";
-        QueryTest queryTest = new QueryTest();
-        try {
-            queryTest.test(filterString);
-//            queryTest.testEndswith();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        for (int i = 0; i < 1000; i++) {
+//            DecimalFormat decimalFormat = new DecimalFormat("#.00");
+//            double result = GenData.random(1.0, 50.0);
+//
+//        }
+
+        new MongoCreateTest().insertData();
+
+//        String filterString = "(Age add 5) eq 15";
+//        MongoQueryTest mongoQueryTest = new MongoQueryTest();
+//        try {
+//            mongoQueryTest.test(filterString);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
