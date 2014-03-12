@@ -117,10 +117,10 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = parameters[0]
-                        + generateMongoDBQuery(root.children.get(0)) + ", "
-                        + generateMongoDBQuery(root.children.get(1)) + "+1"
+                        + generateHQL(root.children.get(0)) + ", "
+                        + generateHQL(root.children.get(1)) + "+1"
                         + ", length("
-                        + generateMongoDBQuery(root.children.get(0)) + ")-" + generateMongoDBQuery(root.children.get(1))
+                        + generateHQL(root.children.get(0)) + ")-" + generateHQL(root.children.get(1))
                         + parameters[1] + " ";
                 return queryString;
             }
@@ -138,8 +138,8 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = " " + parameters[0]
-                        + generateMongoDBQuery(root.children.get(1)) + ", "
-                        + generateMongoDBQuery(root.children.get(0))
+                        + generateHQL(root.children.get(1)) + ", "
+                        + generateHQL(root.children.get(0))
                         + parameters[1] + " ";
                 return queryString;
             }
@@ -157,8 +157,8 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = " " + parameters[0]
-                        + generateMongoDBQuery(root.children.get(0)) + ", "
-                        + generateMongoDBQuery(root.children.get(1))
+                        + generateHQL(root.children.get(0)) + ", "
+                        + generateHQL(root.children.get(1))
                         + parameters[1] + " ";
                 return queryString;
             }
@@ -179,8 +179,8 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = " (" + parameters[0]
-                        + generateMongoDBQuery(root.children.get(1)) + ","
-                        + generateMongoDBQuery(root.children.get(0)) + parameters[1] + ") ";
+                        + generateHQL(root.children.get(1)) + ","
+                        + generateHQL(root.children.get(0)) + parameters[1] + ") ";
                 return queryString;
             }
         }
@@ -202,7 +202,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = parameters[0]
-                        + generateMongoDBQuery(root.children.get(0))
+                        + generateHQL(root.children.get(0))
                         + parameters[1];
                 return queryString;
             }
@@ -220,7 +220,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
 
                 String parameter = replaceTable.get(root.data.toString());
-                String queryString = generateMongoDBQuery(root.children.get(0))
+                String queryString = generateHQL(root.children.get(0))
                         + parameter;
                 return queryString;
             }
@@ -246,7 +246,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = " " + parameters[0]
-                        + generateMongoDBQuery(root.children.get(0))
+                        + generateHQL(root.children.get(0))
                         + parameters[1] + " ";
                 return queryString;
             }
@@ -287,16 +287,16 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
                     {
                         if (root.children.get(0).data.toString().equals("substringof"))
-                            queryString = generateMongoDBQuery(root.children.get(0)).replace("!=", "=");
+                            queryString = generateHQL(root.children.get(0)).replace("!=", "=");
                         else
-                            queryString = generateMongoDBQuery(root.children.get(0)).replace("=", "!=");
+                            queryString = generateHQL(root.children.get(0)).replace("=", "!=");
 
                     } else {
-                        queryString = " " + generateMongoDBQuery(root.children.get(0));
+                        queryString = " " + generateHQL(root.children.get(0));
 
                     }
                 } else {
-                    queryString = " " + generateMongoDBQuery(root.children.get(0)) + " " + parameters[0] + generateMongoDBQuery(root.children.get(1));
+                    queryString = " " + generateHQL(root.children.get(0)) + " " + parameters[0] + generateHQL(root.children.get(1));
                 }
 
                 return " (" + queryString + ") ";
@@ -315,8 +315,8 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = "(" + parameters[0]
-                        + generateMongoDBQuery(root.children.get(0)) + ", "
-                        + generateMongoDBQuery(root.children.get(1))
+                        + generateHQL(root.children.get(0)) + ", "
+                        + generateHQL(root.children.get(1))
                         + parameters[1] + ")";
                 return queryString;
             }
@@ -333,9 +333,9 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             public String generateQueryString(Node<Object> root) {
                 String[] parameters = replaceTable.get(root.data.toString());
                 String queryString = " (" + parameters[0]
-                        + generateMongoDBQuery(root.children.get(0))
-                        + parameters[1] + generateMongoDBQuery(root.children.get(0)) + parameters[2] + generateMongoDBQuery(root.children.get(1))
-                        + parameters[3] + generateMongoDBQuery(root.children.get(1)) + parameters[4] + generateMongoDBQuery(root.children.get(1)) + ") ";
+                        + generateHQL(root.children.get(0))
+                        + parameters[1] + generateHQL(root.children.get(0)) + parameters[2] + generateHQL(root.children.get(1))
+                        + parameters[3] + generateHQL(root.children.get(1)) + parameters[4] + generateHQL(root.children.get(1)) + ") ";
                 return queryString;
             }
         }
@@ -355,19 +355,19 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 String[] parameters = replaceTable.get(root.data.toString());
                 if (root.data.toString().equals("replace")) {
                     String queryString = " " + parameters[0]
-                            + generateMongoDBQuery(root.children.get(0)) + ","
-                            + generateMongoDBQuery(root.children.get(1))
+                            + generateHQL(root.children.get(0)) + ","
+                            + generateHQL(root.children.get(1))
                             + parameters[1]
-                            + generateMongoDBQuery(root.children.get(2))
+                            + generateHQL(root.children.get(2))
                             + parameters[2] + " ";
 
                     return queryString;
                 } else {
                     String queryString = " " + parameters[0]
-                            + generateMongoDBQuery(root.children.get(0)) + ","
-                            + generateMongoDBQuery(root.children.get(1)) + "+1"
+                            + generateHQL(root.children.get(0)) + ","
+                            + generateHQL(root.children.get(1)) + "+1"
                             + parameters[1]
-                            + generateMongoDBQuery(root.children.get(2))
+                            + generateHQL(root.children.get(2))
                             + parameters[2] + " ";
                     return queryString;
                 }
@@ -375,7 +375,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             }
         }
 
-        String generateMongoDBQuery(Node<Object> root) {
+        String generateHQL(Node<Object> root) {
             String rootDataValue = root.data.toString();
             String childrenNum = Integer.toString(root.children.size());
             if (generateMatchTable.containsKey(rootDataValue + ","
@@ -388,7 +388,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
         }
 
         String generateHQLWhereClause() {
-            String finString = generateMongoDBQuery(AST.root);
+            String finString = generateHQL(AST.root);
             query.append(finString);
 
             return query.toString();
