@@ -90,6 +90,7 @@ public class GenData {
             me.put("Age", 22);
             me.put("Year", 1992);
             me.put("BirthDate", new Date(701293600000L));
+            me.put("Height", 179.047);
             me.put("Description", "me");
         } catch (JSONException e) {
             e.printStackTrace();
