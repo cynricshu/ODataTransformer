@@ -1,7 +1,5 @@
 package bootstrap;
 
-import test.mongo.MongoCreateTest;
-
 /**
  * User: Cynric
  * Date: 14-3-4
@@ -17,7 +15,6 @@ public class Bootstrap {
 //
 //        }
 
-        new MongoCreateTest().insertData();
 
 //        String filterString = "(Age add 5) eq 15";
 //        MongoQueryTest mongoQueryTest = new MongoQueryTest();
