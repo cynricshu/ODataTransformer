@@ -1,10 +1,15 @@
 package datasource;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import transformer.DataTransformer;
+import transformer.ODataFilterToHQLWhereClauseTransformer;
 import util.json.JSONArray;
 import util.json.JSONException;
 import util.json.JSONObject;
+
+import java.util.List;
 
 
 /**
@@ -20,7 +25,58 @@ public class HibernateDatasource implements Datasource {
 
     @Override
     public JSONArray query(String modelName, JSONObject queryParameters) {
-        return null;
+        int skip = 0;
+        int top = 0;
+        StringBuilder hqlBuilder = new StringBuilder();
+        String whereClause = null;
+
+        if (queryParameters != null) {
+            if (queryParameters.has("$filter")) {
+                try {
+                    String filterString = queryParameters.getString("$filter");
+                    DataTransformer transformer = new ODataFilterToHQLWhereClauseTransformer();
+                    whereClause = transformer.transform(filterString, null);
+
+//                System.out.println(query.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            try {
+                if (queryParameters.has("$skip")) {
+                    skip = queryParameters.getInt("$skip");
+                }
+                if (queryParameters.has("$top")) {
+                    top = queryParameters.getInt("$top");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        hqlBuilder.append("from ").append(modelName);
+        if (whereClause != null) {
+            hqlBuilder.append(" WHERE ").append(whereClause);
+        }
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(hqlBuilder.toString());
+        if (skip != 0) {
+            query.setFirstResult(skip);
+        }
+        if (top != 0) {
+            query.setMaxResults(top);
+        }
+
+        List list = query.list();
+        session.flush();
+        session.close();
+
+        JSONArray jsonArray = new JSONArray(list);
+
+        return jsonArray;
     }
 
     @Override
