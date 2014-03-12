@@ -1,7 +1,7 @@
 package test.mongo;
 
 import datasource.Datasource;
-import datasource.MongodbDatasource;
+import datasource.mongodb.MongodbDatasource;
 
 /**
  * User: Cynric

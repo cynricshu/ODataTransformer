@@ -71,7 +71,9 @@
           <root url="jar://$MODULE_DIR$/lib/hibernate-core-4.3.4.Final.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../../java-libs/hibernate-core-4.3.4.Final-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">

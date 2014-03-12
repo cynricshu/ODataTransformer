@@ -1,7 +1,7 @@
 package test.hibernate;
 
 import datasource.Datasource;
-import datasource.HibernateDatasource;
+import datasource.hibernate.HibernateDatasource;
 
 /**
  * User: Cynric

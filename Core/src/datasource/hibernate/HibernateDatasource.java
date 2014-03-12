@@ -1,5 +1,6 @@
-package datasource;
+package datasource.hibernate;
 
+import datasource.Datasource;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

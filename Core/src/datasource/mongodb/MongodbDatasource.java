@@ -1,4 +1,4 @@
-package datasource;
+package datasource.mongodb;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -8,6 +8,7 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
+import datasource.Datasource;
 import org.bson.types.ObjectId;
 import transformer.DataTransformer;
 import transformer.ODataFilterToMongoDBTransformer;
