@@ -131,7 +131,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             Map<String, String[]> replaceTable = new HashMap<>();
 
             public rootRightLeft() {
-                replaceTable.put("indexof", new String[]{"charindex(", ")-1"});
+                replaceTable.put("indexof", new String[]{"locate(", ")-1"});
             }
 
             @Override
@@ -169,7 +169,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             Map<String, String[]> replaceTable = new HashMap<>();
 
             public rootLeftRight() {
-                replaceTable.put("startswith", new String[]{"charindex(", ")=1"});
+                replaceTable.put("startswith", new String[]{"locate(", ")=1"});
 
             }
 
@@ -307,7 +307,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             Map<String, String[]> replaceTable = new HashMap<>();
 
             public RightRootLeft() {
-                replaceTable.put("substringof", new String[]{"charindex(",
+                replaceTable.put("substringof", new String[]{"locate(",
                         ")!=0"});
             }
 
