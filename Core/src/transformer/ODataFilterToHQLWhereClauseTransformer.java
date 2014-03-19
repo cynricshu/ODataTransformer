@@ -190,7 +190,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 replaceTable.put("ceiling", new String[]{"ceiling(", ")"});
                 replaceTable.put("floor", new String[]{"floor(", ")"});
                 replaceTable.put("round", new String[]{"round(", ", 0)"});
-                replaceTable.put("not", new String[]{"!(", ")"});
+                replaceTable.put("not", new String[]{"not (", ")"});
                 replaceTable.put("tolower", new String[]{"lower(", ")"});
                 replaceTable.put("toupper", new String[]{"upper(", ")"});
                 replaceTable.put("trim", new String[]{"trim(", ")"});
