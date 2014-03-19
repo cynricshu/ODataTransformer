@@ -41,8 +41,6 @@ public class ODataFilterToHQLWhereClauseTransformer implements
 
         Node<Object> currentNode = AST.root;
 
-        boolean boolExpression = false;
-
         boolean simpleOperation = true;
 
         public HQLWhereClauseExpressionVisitor() {
@@ -50,7 +48,6 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 rootLeft rootLeftGenerator = new rootLeft();
                 substringTwoParameter substringTwoParameterGenerator = new substringTwoParameter();
                 concatGenertor rootRightGenerator = new concatGenertor();
-                timeFunction timeFunctionGenerator = new timeFunction();
                 leftRoot leftRootGenerator = new leftRoot();
                 rootRightLeft rootRightLeftGenerator = new rootRightLeft();
                 rootLeftRight rootLeftRightGenerator = new rootLeftRight();
@@ -65,8 +62,9 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 generateMatchTable.put("trim,1", rootLeftGenerator);
                 generateMatchTable.put("tolower,1", rootLeftGenerator);
                 generateMatchTable.put("boolparen,1", leftRootGenerator);
+                generateMatchTable.put("paren,1", leftRootGenerator);
                 generateMatchTable.put("toupper,1", rootLeftGenerator);
-                generateMatchTable.put("length,1", timeFunctionGenerator);
+                generateMatchTable.put("length,1", rootLeftGenerator);
                 generateMatchTable.put("and,2", leftRootRightGenerator);
                 generateMatchTable.put("or,2", leftRootRightGenerator);
                 generateMatchTable.put("add,2", leftRootRightGenerator);
@@ -88,12 +86,12 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 generateMatchTable.put("replace,2", leftRootRightGenerator);
                 generateMatchTable.put("concat,2", rootRightGenerator);
                 generateMatchTable.put("substringof,2", RightRootLeftGenerator);
-                generateMatchTable.put("month,1", timeFunctionGenerator);
-                generateMatchTable.put("year,1", timeFunctionGenerator);
-                generateMatchTable.put("second,1", timeFunctionGenerator);
-                generateMatchTable.put("minute,1", timeFunctionGenerator);
-                generateMatchTable.put("hour,1", timeFunctionGenerator);
-                generateMatchTable.put("day,1", timeFunctionGenerator);
+                generateMatchTable.put("month,1", rootLeftGenerator);
+                generateMatchTable.put("year,1", rootLeftGenerator);
+                generateMatchTable.put("second,1", rootLeftGenerator);
+                generateMatchTable.put("minute,1", rootLeftGenerator);
+                generateMatchTable.put("hour,1", rootLeftGenerator);
+                generateMatchTable.put("day,1", rootLeftGenerator);
                 generateMatchTable.put("replace,3",
                         leftRootRightThreeParametersGenerator);
                 generateMatchTable.put("substring,3",
@@ -196,6 +194,14 @@ public class ODataFilterToHQLWhereClauseTransformer implements
                 replaceTable.put("tolower", new String[]{"lower(", ")"});
                 replaceTable.put("toupper", new String[]{"upper(", ")"});
                 replaceTable.put("trim", new String[]{"trim(", ")"});
+                replaceTable.put("length", new String[]{"length(", ")"});
+
+                replaceTable.put("day", new String[]{"day(", ")"});
+                replaceTable.put("month", new String[]{"month(", ")"});
+                replaceTable.put("year", new String[]{"year(", ")"});
+                replaceTable.put("minute", new String[]{"minute(", ")"});
+                replaceTable.put("second", new String[]{"second(", ")"});
+                replaceTable.put("hour", new String[]{"hour(", ")"});
             }
 
             @Override
@@ -212,45 +218,24 @@ public class ODataFilterToHQLWhereClauseTransformer implements
             Map<String, String> replaceTable = new HashMap<>();
 
             public leftRoot() {
-                replaceTable.put("length", ".size");
                 replaceTable.put("boolparen", "");
+                replaceTable.put("paren", "");
             }
 
             @Override
             public String generateQueryString(Node<Object> root) {
 
                 String parameter = replaceTable.get(root.data.toString());
-                String queryString = generateHQL(root.children.get(0))
-                        + parameter;
+                String queryString;
+
+                if ("boolparen".equals(root.data.toString())
+                        || "paren".equals(root.data.toString())) {
+                    queryString = "(" + generateHQL(root.children.get(0)) + parameter + ")";
+                } else {
+                    queryString = generateHQL(root.children.get(0)) + parameter;
+                }
                 return queryString;
             }
-
-        }
-
-        class timeFunction extends generator {
-            Map<String, String[]> replaceTable = new HashMap<>();
-
-            public timeFunction() {
-                replaceTable.put("length", new String[]{"length(", ")"});
-
-                replaceTable.put("day", new String[]{"day(", ")"});
-                replaceTable.put("month", new String[]{"month(", ")"});
-                replaceTable.put("year", new String[]{"year(", ")"});
-                replaceTable.put("minute", new String[]{"minute(", ")"});
-                replaceTable.put("second", new String[]{"second(", ")"});
-                replaceTable.put("hour", new String[]{"hour(", ")"});
-            }
-
-            @Override
-            public String generateQueryString(Node<Object> root) {
-
-                String[] parameters = replaceTable.get(root.data.toString());
-                String queryString = " " + parameters[0]
-                        + generateHQL(root.children.get(0))
-                        + parameters[1] + " ";
-                return queryString;
-            }
-
         }
 
         class leftRootRight extends generator {
