@@ -4,7 +4,7 @@ ODataTransformer
 
 This project is my graduation design.
 It is focus on transform OData query options ($filter, $skip, $top...) 
-to hql and mongodb query sentence using Java.
+to hql and datasource.mongodb query sentence using Java.
 
 I want to build a component that is easy to be embedded to any Java web applications.
 This component must be light and easy to use.
