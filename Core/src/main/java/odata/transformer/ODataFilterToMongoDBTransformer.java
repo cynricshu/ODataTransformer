@@ -2,6 +2,7 @@ package odata.transformer;
 
 import com.mongodb.BasicDBObject;
 import odata.expressionvisitor.MongoDBExpressionVisitor;
+import odata.transformer.generator.MongoDBQueryGenerator;
 import org.odata4j.expression.CommonExpression;
 import org.odata4j.expression.ExpressionParser;
 
@@ -18,8 +19,8 @@ public class ODataFilterToMongoDBTransformer implements DataTransformer {
         MongoDBExpressionVisitor visitor = new MongoDBExpressionVisitor();
         expression.visit(visitor);
 
-        BasicDBObject mongoDBQuery = visitor.generateMongoDBQuery();
-//        System.out.println(mongoDBQuery);
+        BasicDBObject mongoDBQuery = new MongoDBQueryGenerator().generateMongoDBQuery(visitor.getAST());
+        System.out.println(mongoDBQuery);
         return mongoDBQuery;
     }
 

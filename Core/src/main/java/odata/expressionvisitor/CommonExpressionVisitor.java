@@ -15,6 +15,10 @@ public class CommonExpressionVisitor implements org.odata4j.expression.Expressio
     Tree<Object> AST = new Tree("");
     Node<Object> currentNode = AST.root;
 
+    public Tree<Object> getAST() {
+        return AST;
+    }
+
     @Override
     public void afterDescend() {
         if (currentNode.parent != null) {
@@ -140,6 +144,7 @@ public class CommonExpressionVisitor implements org.odata4j.expression.Expressio
     public void visit(AddExpression arg0) {
         currentNode.data = "+";
     }
+
     @Override
     public void visit(SubExpression arg0) {
         currentNode.data = "-";

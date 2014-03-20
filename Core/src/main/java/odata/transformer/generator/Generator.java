@@ -1,4 +1,4 @@
-package odata.expressionvisitor;
+package odata.transformer.generator;
 
 import util.Node;
 
@@ -10,4 +10,5 @@ import util.Node;
 
 public abstract class Generator {
     public abstract String generateQueryString(Node<Object> root);
+
 }

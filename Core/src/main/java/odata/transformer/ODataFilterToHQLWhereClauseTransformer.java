@@ -1,6 +1,7 @@
 package odata.transformer;
 
 import odata.expressionvisitor.HQLWhereClauseExpressionVisitor;
+import odata.transformer.generator.HqlWhereClauseGenerator;
 import org.odata4j.expression.CommonExpression;
 import org.odata4j.expression.ExpressionParser;
 
@@ -12,7 +13,7 @@ public class ODataFilterToHQLWhereClauseTransformer implements DataTransformer {
         HQLWhereClauseExpressionVisitor visitor = new HQLWhereClauseExpressionVisitor();
         expression.visit(visitor);
 
-        String hqlWhereClause = visitor.generateHQLWhereClause();
+        String hqlWhereClause = new HqlWhereClauseGenerator().generateHQLWhereClause(visitor.getAST());
         System.out.println(hqlWhereClause);
         return hqlWhereClause;
     }
