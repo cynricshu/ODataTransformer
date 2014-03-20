@@ -35,6 +35,8 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testEq() throws Exception {
         String filterString = "Name eq 'Cynric'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
+
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
 
@@ -48,6 +50,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testGe() throws Exception {
         String filterString = "Age ge 22";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -61,14 +64,16 @@ public class HibernateQueryTest extends HibernateTest {
 
     @Test
     public void testAnd() throws Exception {
-        String filterString = "Age ge 22 and Name eq 'Cynric'";
+        String filterString = "Age ge 22 and BirthDate eq '1992-03-22 19:46:40.0'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
 
         for (int i = 0; i < resultList.length(); i++) {
             Map entity = (Map) resultList.get(i);
-            assertTrue(Integer.parseInt(entity.get("Age").toString()) >= 22 && entity.get("Name").toString().equals("Cynric"));
+            assertTrue(Integer.parseInt(entity.get("Age").toString()) >= 22 &&
+                    entity.get("BirthDate").toString().equals("1992-03-22 19:46:40.0"));
         }
         System.out.println("Test Pass for Hibernate$filter: " + filterString);
     }
@@ -76,6 +81,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testOr() throws Exception {
         String filterString = "Age ge 22 or Name eq 'Cynric'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -90,6 +96,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testNot() throws Exception {
         String filterString = "not Age ge 22 or Name eq 'Cynric'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -104,6 +111,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testNot2() throws Exception {
         String filterString = "not (Age ge 50 or Name ne 'Cynric')";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -118,6 +126,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testAdd() throws Exception {
         String filterString = "Age add 5 gt 20";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -132,6 +141,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testSub() throws Exception {
         String filterString = "Age sub 5 lt 20";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -146,6 +156,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testMul() throws Exception {
         String filterString = "Age mul 2 le 50";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -160,6 +171,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testDiv() throws Exception {
         String filterString = "(Age div 2) ne 20";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -174,6 +186,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testMod() throws Exception {
         String filterString = "(Age add 2) mod 2 ne 0";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -188,6 +201,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testSubstringof() throws Exception {
         String filterString = "substringof('A', Name) eq true";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -202,6 +216,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testStartswith() throws Exception {
         String filterString = "startswith(Name, 'B') eq true";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -216,6 +231,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testEndswith() throws Exception {
         String filterString = "endswith(Name, 'c') eq true";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -230,6 +246,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testLength() throws Exception {
         String filterString = "length(Name) eq 6";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -244,6 +261,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testIndexof() throws Exception {
         String filterString = "indexof(Name, 'c') eq 3";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -258,6 +276,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testReplace() throws Exception {
         String filterString = "replace(Name, 'C', 'c') eq 'cynric'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -272,6 +291,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testSubstring() throws Exception {
         String filterString = "substring(Name, 0, 2) eq 'Cy'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -286,6 +306,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testTolower() throws Exception {
         String filterString = "tolower(Name) eq 'cynric'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -300,6 +321,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testToupper() throws Exception {
         String filterString = "toupper(Name) eq 'CYNRIC'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -314,6 +336,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testTrim() throws Exception {
         String filterString = "trim(Name) eq 'Bye bye'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -328,6 +351,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testConcat() throws Exception {
         String filterString = "concat(concat(Name, ', '), Description) eq 'Cynric, me'";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -343,6 +367,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testYear() throws Exception {
         String filterString = "year(BirthDate) eq 1992";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -359,6 +384,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testMonth() throws Exception {
         String filterString = "month(BirthDate) eq 3";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -375,6 +401,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testDay() throws Exception {
         String filterString = "day(BirthDate) eq 22";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -391,6 +418,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testHour() throws Exception {
         String filterString = "hour(BirthDate) eq 10";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -407,6 +435,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testMinute() throws Exception {
         String filterString = "minute(BirthDate) eq 58";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -423,6 +452,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testSecond() throws Exception {
         String filterString = "second(BirthDate) eq 31";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -439,6 +469,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testFloor() throws Exception {
         String filterString = "floor(Height) eq 170";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -453,6 +484,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testRound() throws Exception {
         String filterString = "round(Height) eq 165";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);
@@ -467,6 +499,7 @@ public class HibernateQueryTest extends HibernateTest {
     @Test
     public void testCeiling() throws Exception {
         String filterString = "ceiling(Height) eq 160";
+        System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
         assertTrue("no match result entity!", resultList.length() > 0);

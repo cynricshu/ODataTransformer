@@ -1,7 +1,6 @@
 package odata.expressionvisitor;
 
 import util.Node;
-import util.Tree;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +11,7 @@ import java.util.Map;
  * Time: 14:37
  */
 public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
+    static final Map<String, Generator> generateMatchTable = new HashMap<>();
     StringBuilder hqlQuery = new StringBuilder();
 
     public HQLWhereClauseExpressionVisitor() {
@@ -38,17 +38,17 @@ public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
             generateMatchTable.put("length", rootLeftGenerator);
             generateMatchTable.put("and", leftRootRightGenerator);
             generateMatchTable.put("or", leftRootRightGenerator);
-            generateMatchTable.put("add", leftRootRightGenerator);
-            generateMatchTable.put("sub", leftRootRightGenerator);
-            generateMatchTable.put("div", leftRootRightGenerator);
-            generateMatchTable.put("mod", leftRootRightGenerator);
-            generateMatchTable.put("mul", leftRootRightGenerator);
-            generateMatchTable.put("eq", leftRootRightGenerator);
-            generateMatchTable.put("ne", leftRootRightGenerator);
-            generateMatchTable.put("le", leftRootRightGenerator);
-            generateMatchTable.put("ge", leftRootRightGenerator);
-            generateMatchTable.put("gt", leftRootRightGenerator);
-            generateMatchTable.put("lt", leftRootRightGenerator);
+            generateMatchTable.put("+", leftRootRightGenerator);
+            generateMatchTable.put("-", leftRootRightGenerator);
+            generateMatchTable.put("/", leftRootRightGenerator);
+            generateMatchTable.put("%", leftRootRightGenerator);
+            generateMatchTable.put("*", leftRootRightGenerator);
+            generateMatchTable.put("=", leftRootRightGenerator);
+            generateMatchTable.put("!=", leftRootRightGenerator);
+            generateMatchTable.put("<=", leftRootRightGenerator);
+            generateMatchTable.put(">=", leftRootRightGenerator);
+            generateMatchTable.put(">", leftRootRightGenerator);
+            generateMatchTable.put("<", leftRootRightGenerator);
             generateMatchTable.put("startswith", rootLeftRightGenerator);
             generateMatchTable.put("endswith", endWithGenerator);
             generateMatchTable.put("indexof", rootRightLeftGenerator);
@@ -56,7 +56,6 @@ public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
                     substringTwoParameterGenerator);
             generateMatchTable.put("substring3",
                     leftRootRightThreeParametersGenerator);
-            generateMatchTable.put("replace", leftRootRightGenerator);
             generateMatchTable.put("concat", rootRightGenerator);
             generateMatchTable.put("substringof", RightRootLeftGenerator);
             generateMatchTable.put("month", rootLeftGenerator);
@@ -207,30 +206,12 @@ public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
     }
 
     class leftRootRight extends Generator {
-        Map<String, String[]> replaceTable = new HashMap<>();
-
-        public leftRootRight() {
-            replaceTable.put("add", new String[]{"+", ""});
-            replaceTable.put("mul", new String[]{"*", ""});
-            replaceTable.put("mod", new String[]{"%", ""});
-            replaceTable.put("div", new String[]{"/", ""});
-            replaceTable.put("sub", new String[]{"-", ""});
-            replaceTable.put("and", new String[]{"and", ""});
-            replaceTable.put("or", new String[]{"or", ""});
-            replaceTable.put("eq", new String[]{"=", ""});
-            replaceTable.put("ne", new String[]{"!=", ""});
-            replaceTable.put("gt", new String[]{">", ""});
-            replaceTable.put("ge", new String[]{">=", ""});
-            replaceTable.put("lt", new String[]{"<", ""});
-            replaceTable.put("le", new String[]{"<=", ""});
-        }
 
         @Override
         public String generateQueryString(Node<Object> root) {
-            String[] parameters = replaceTable.get(root.data.toString());
             StringBuilder queryString = new StringBuilder();
 
-            if (root.data.toString().equals("eq")
+            if (root.data.toString().equals("=")
                     && (root.children.get(0).data.toString().equals("startswith")
                     || root.children.get(0).data.toString().equals("endswith")
                     || root.children.get(0).data.toString().equals("substringof"))) {
@@ -244,10 +225,11 @@ public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
                     queryString.append(generateHQL(root.children.get(0))).append(" ");
                 }
             } else {
-                queryString.append(generateHQL(root.children.get(0))).append(parameters[0])
+                queryString.append(generateHQL(root.children.get(0))).append(" ")
+                        .append(root.data.toString()).append(" ")
                         .append(generateHQL(root.children.get(1)));
             }
-            return " (" + queryString + ") ";
+            return queryString.toString();
         }
     }
 
@@ -347,10 +329,4 @@ public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
         return hqlQuery.toString();
 
     }
-
-    public Tree<Object> getAST() {
-        return AST;
-    }
-
-
 }
