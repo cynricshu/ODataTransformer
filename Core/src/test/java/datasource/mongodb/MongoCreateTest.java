@@ -1,4 +1,4 @@
-package mongo;
+package datasource.mongodb;
 
 import util.GenData;
 import util.json.JSONArray;

@@ -1,11 +1,10 @@
-package transformer;
+package odata.transformer;
 
+import odata.expressionvisitor.HQLWhereClauseExpressionVisitor;
 import org.odata4j.expression.CommonExpression;
 import org.odata4j.expression.ExpressionParser;
-import transformer.expressionvisitor.HQLWhereClauseExpressionVisitor;
 
-public class ODataFilterToHQLWhereClauseTransformer implements
-        DataTransformer {
+public class ODataFilterToHQLWhereClauseTransformer implements DataTransformer {
 
     @Override
     public String transform(String inputData, Object[] params) {

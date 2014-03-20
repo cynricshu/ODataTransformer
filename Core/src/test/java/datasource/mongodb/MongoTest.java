@@ -1,7 +1,6 @@
-package mongo;
+package datasource.mongodb;
 
 import datasource.Datasource;
-import datasource.mongodb.MongodbDatasource;
 
 /**
  * User: Cynric

@@ -1,11 +1,11 @@
 package datasource.hibernate;
 
 import datasource.Datasource;
+import odata.transformer.DataTransformer;
+import odata.transformer.ODataFilterToHQLWhereClauseTransformer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import transformer.DataTransformer;
-import transformer.ODataFilterToHQLWhereClauseTransformer;
 import util.json.JSONArray;
 import util.json.JSONException;
 import util.json.JSONObject;

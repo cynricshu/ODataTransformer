@@ -1,4 +1,4 @@
-package mongo;
+package datasource.mongodb;
 
 import com.mongodb.BasicDBObject;
 import org.junit.Test;

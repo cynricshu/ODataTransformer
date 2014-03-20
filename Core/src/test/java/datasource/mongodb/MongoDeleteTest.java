@@ -1,4 +1,4 @@
-package mongo;
+package datasource.mongodb;
 
 import util.json.JSONException;
 import util.json.JSONObject;
