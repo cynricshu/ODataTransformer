@@ -22,7 +22,6 @@ public class HqlWhereClauseGenerator {
             substringTwoParameter substringTwoParameterGenerator = new substringTwoParameter();
             rootRightLeft rootRightLeftGenerator = new rootRightLeft();
             rootLeftRight rootLeftRightGenerator = new rootLeftRight();
-            RightRootLeft RightRootLeftGenerator = new RightRootLeft();
             leftRootRight leftRootRightGenerator = new leftRootRight();
             endsWith endWithGenerator = new endsWith();
             leftRootRightThreeParameters leftRootRightThreeParametersGenerator = new leftRootRightThreeParameters();
@@ -57,7 +56,7 @@ public class HqlWhereClauseGenerator {
             generateMatchTable.put("substring3",
                     leftRootRightThreeParametersGenerator);
             generateMatchTable.put("concat", rootLeftRightGenerator);
-            generateMatchTable.put("substringof", RightRootLeftGenerator);
+            generateMatchTable.put("substringof", rootLeftRightGenerator);
             generateMatchTable.put("month", rootLeftGenerator);
             generateMatchTable.put("year", rootLeftGenerator);
             generateMatchTable.put("second", rootLeftGenerator);
@@ -67,65 +66,6 @@ public class HqlWhereClauseGenerator {
             generateMatchTable.put("replace",
                     leftRootRightThreeParametersGenerator);
 
-        }
-    }
-
-    class substringTwoParameter extends Generator {
-        Map<String, String[]> replaceTable = new HashMap<>();
-
-        public substringTwoParameter() {
-            replaceTable.put("substring", new String[]{"substring(", ")"});
-
-        }
-
-        @Override
-        public String generateQueryString(Node<Object> root) {
-            String[] parameters = replaceTable.get(root.data.toString());
-            StringBuilder queryString = new StringBuilder(parameters[0])
-                    .append(generateHQL(root.children.get(0))).append(", ")
-                    .append(generateHQL(root.children.get(1))).append(" + 1")
-                    .append(", length(")
-                    .append(generateHQL(root.children.get(0))).append(") - ")
-                    .append(generateHQL(root.children.get(1)))
-                    .append(parameters[1]).append(" ");
-            return queryString.toString();
-        }
-    }
-
-    class rootRightLeft extends Generator {
-        Map<String, String[]> replaceTable = new HashMap<>();
-
-        public rootRightLeft() {
-            replaceTable.put("indexof", new String[]{"locate(", ") - 1"});
-            replaceTable.put("startswith", new String[]{"locate(", ") = 1"});
-        }
-
-        @Override
-        public String generateQueryString(Node<Object> root) {
-            String[] parameters = replaceTable.get(root.data.toString());
-            StringBuilder queryString = new StringBuilder(parameters[0])
-                    .append(generateHQL(root.children.get(1))).append(", ")
-                    .append(generateHQL(root.children.get(0)))
-                    .append(parameters[1]).append(" ");
-            return queryString.toString();
-        }
-    }
-
-    class rootLeftRight extends Generator {
-        Map<String, String[]> replaceTable = new HashMap<>();
-
-        public rootLeftRight() {
-            replaceTable.put("concat", new String[]{"concat(", ")"});
-        }
-
-        @Override
-        public String generateQueryString(Node<Object> root) {
-            String[] parameters = replaceTable.get(root.data.toString());
-            StringBuilder queryString = new StringBuilder().append(parameters[0])
-                    .append(generateHQL(root.children.get(0))).append(", ")
-                    .append(generateHQL(root.children.get(1)))
-                    .append(parameters[1]).append(" ");
-            return queryString.toString();
         }
     }
 
@@ -170,6 +110,45 @@ public class HqlWhereClauseGenerator {
             return queryString.toString();
         }
     }
+
+    class rootRightLeft extends Generator {
+        Map<String, String[]> replaceTable = new HashMap<>();
+
+        public rootRightLeft() {
+            replaceTable.put("indexof", new String[]{"locate(", ") - 1"});
+            replaceTable.put("startswith", new String[]{"locate(", ") = 1"});
+        }
+
+        @Override
+        public String generateQueryString(Node<Object> root) {
+            String[] parameters = replaceTable.get(root.data.toString());
+            StringBuilder queryString = new StringBuilder(parameters[0])
+                    .append(generateHQL(root.children.get(1))).append(", ")
+                    .append(generateHQL(root.children.get(0)))
+                    .append(parameters[1]).append(" ");
+            return queryString.toString();
+        }
+    }
+
+    class rootLeftRight extends Generator {
+        Map<String, String[]> replaceTable = new HashMap<>();
+
+        public rootLeftRight() {
+            replaceTable.put("concat", new String[]{"concat(", ")"});
+            replaceTable.put("substringof", new String[]{"locate(", ") != 0"});
+        }
+
+        @Override
+        public String generateQueryString(Node<Object> root) {
+            String[] parameters = replaceTable.get(root.data.toString());
+            StringBuilder queryString = new StringBuilder().append(parameters[0])
+                    .append(generateHQL(root.children.get(0))).append(", ")
+                    .append(generateHQL(root.children.get(1)))
+                    .append(parameters[1]).append(" ");
+            return queryString.toString();
+        }
+    }
+
 
     class leftRootRight extends Generator {
 
@@ -232,24 +211,6 @@ public class HqlWhereClauseGenerator {
         }
     }
 
-    class RightRootLeft extends Generator {
-        Map<String, String[]> replaceTable = new HashMap<>();
-
-        public RightRootLeft() {
-            replaceTable.put("substringof", new String[]{"locate(", ") != 0"});
-        }
-
-        @Override
-        public String generateQueryString(Node<Object> root) {
-            String[] parameters = replaceTable.get(root.data.toString());
-            StringBuilder queryString = new StringBuilder(parameters[0])
-                    .append(generateHQL(root.children.get(0))).append(", ")
-                    .append(generateHQL(root.children.get(1)))
-                    .append(parameters[1]);
-            return queryString.toString();
-        }
-    }
-
     class endsWith extends Generator {
         Map<String, String[]> replaceTable = new HashMap<>();
 
@@ -271,6 +232,27 @@ public class HqlWhereClauseGenerator {
         }
     }
 
+    class substringTwoParameter extends Generator {
+        Map<String, String[]> replaceTable = new HashMap<>();
+
+        public substringTwoParameter() {
+            replaceTable.put("substring", new String[]{"substring(", ")"});
+
+        }
+
+        @Override
+        public String generateQueryString(Node<Object> root) {
+            String[] parameters = replaceTable.get(root.data.toString());
+            StringBuilder queryString = new StringBuilder(parameters[0])
+                    .append(generateHQL(root.children.get(0))).append(", ")
+                    .append(generateHQL(root.children.get(1))).append(" + 1")
+                    .append(", length(")
+                    .append(generateHQL(root.children.get(0))).append(") - ")
+                    .append(generateHQL(root.children.get(1)))
+                    .append(parameters[1]).append(" ");
+            return queryString.toString();
+        }
+    }
 
 
     String generateHQL(Node<Object> root) {
