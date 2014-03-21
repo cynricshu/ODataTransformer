@@ -4,6 +4,7 @@ import util.json.JSONArray;
 import util.json.JSONException;
 import util.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -15,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Time: 11:12
  */
 public class GenData {
-    public static SimpleDateFormat _formater = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat _formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     public static Date genDate(String beginDate, String endDate) {
 
@@ -74,7 +75,7 @@ public class GenData {
             people.put("Name", GenData.genString(6));
             people.put("Age", GenData.genAge(1, 100));
             people.put("Year", GenData.genYear(1970, 2015));
-            people.put("BirthDate", GenData.genDate("1970-01-01", "2014-12-30"));
+            people.put("BirthDate", GenData.genDate("1970-01-01 00:00:00", "2014-12-30 00:00:00"));
             people.put("Height", GenData.random(155.0, 200.0));
             people.put("Description", "other");
         } catch (JSONException e) {
@@ -89,10 +90,12 @@ public class GenData {
             me.put("Name", "Cynric");
             me.put("Age", 22);
             me.put("Year", 1992);
-            me.put("BirthDate", new Date(701293600000L));
+            me.put("BirthDate", _formater.parse("1992-03-22 19:46:40"));
             me.put("Height", 179.047);
             me.put("Description", "me");
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return me;
