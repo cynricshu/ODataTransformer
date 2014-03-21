@@ -89,8 +89,6 @@ public class HqlWhereClauseGenerator {
             replaceTable.put("second", new String[]{"second(", ")"});
             replaceTable.put("hour", new String[]{"hour(", ")"});
 
-            replaceTable.put("boolparen", new String[]{"", ""});
-            replaceTable.put("paren", new String[]{"", ""});
         }
 
         @Override
@@ -148,7 +146,6 @@ public class HqlWhereClauseGenerator {
             return queryString.toString();
         }
     }
-
 
     class leftRootRight extends Generator {
 
@@ -222,12 +219,12 @@ public class HqlWhereClauseGenerator {
         @Override
         public String generateQueryString(Node<Object> root) {
             String[] parameters = replaceTable.get(root.data.toString());
-            StringBuilder queryString = new StringBuilder(" (").append(parameters[0])
+            StringBuilder queryString = new StringBuilder().append(parameters[0])
                     .append(generateHQL(root.children.get(0)))
                     .append(parameters[1]).append(generateHQL(root.children.get(0)))
                     .append(parameters[2]).append(generateHQL(root.children.get(1)))
                     .append(parameters[3]).append(generateHQL(root.children.get(1)))
-                    .append(") ");
+                    .append(" ");
             return queryString.toString();
         }
     }
