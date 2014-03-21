@@ -10,7 +10,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 import datasource.Datasource;
 import odata.transformer.DataTransformer;
-import odata.transformer.ODataFilterToMongoDBTransformer;
+import odata.transformer.MongodbTransformer;
 import org.bson.types.ObjectId;
 import util.json.JSONArray;
 import util.json.JSONException;
@@ -83,7 +83,7 @@ public class MongodbDatasource implements Datasource {
             if (queryParameters.has("$filter")) {
                 try {
                     String filterString = queryParameters.getString("$filter");
-                    DataTransformer transformer = new ODataFilterToMongoDBTransformer();
+                    DataTransformer transformer = new MongodbTransformer();
                     query = transformer.transform(filterString, null);
 
 //                System.out.println(query.toString());
@@ -187,7 +187,7 @@ public class MongodbDatasource implements Datasource {
             if (queryParameters.has("$filter")) {
                 try {
                     String filterString = queryParameters.getString("$filter");
-                    DataTransformer transformer = new ODataFilterToMongoDBTransformer();
+                    DataTransformer transformer = new MongodbTransformer();
                     query = transformer.transform(filterString, null);
 
                     System.out.println(query.toString());
@@ -229,7 +229,7 @@ public class MongodbDatasource implements Datasource {
         if (queryParameters != null && queryParameters.has("$filter")) {
             try {
                 String filterString = queryParameters.getString("$filter");
-                DataTransformer transformer = new ODataFilterToMongoDBTransformer();
+                DataTransformer transformer = new MongodbTransformer();
                 query = transformer.transform(filterString, null);
 
                 System.out.println(query.toString());

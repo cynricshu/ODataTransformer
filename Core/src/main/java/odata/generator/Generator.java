@@ -1,4 +1,4 @@
-package odata.transformer.generator;
+package odata.generator;
 
 import util.Node;
 

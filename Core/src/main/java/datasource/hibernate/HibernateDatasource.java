@@ -2,7 +2,7 @@ package datasource.hibernate;
 
 import datasource.Datasource;
 import odata.transformer.DataTransformer;
-import odata.transformer.ODataFilterToHQLWhereClauseTransformer;
+import odata.transformer.HqlWhereClauseTransformer;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -35,7 +35,7 @@ public class HibernateDatasource implements Datasource {
             if (queryParameters.has("$filter")) {
                 try {
                     String filterString = queryParameters.getString("$filter");
-                    DataTransformer transformer = new ODataFilterToHQLWhereClauseTransformer();
+                    DataTransformer transformer = new HqlWhereClauseTransformer();
                     whereClause = transformer.transform(filterString, null);
 
 //                System.out.println(query.toString());
