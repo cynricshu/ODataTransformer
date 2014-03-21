@@ -5,6 +5,6 @@ package odata.expressionvisitor;
  * Date: 14-3-20
  * Time: 14:37
  */
-public class HQLWhereClauseExpressionVisitor extends CommonExpressionVisitor {
+public class HqlWhereClauseExpressionVisitor extends CommonExpressionVisitor {
 
 }

@@ -12,7 +12,7 @@ import org.odata4j.expression.OrExpression;
  * Date: 14-3-20
  * Time: 14:58
  */
-public class MongoDBExpressionVisitor extends CommonExpressionVisitor {
+public class MongodbExpressionVisitor extends CommonExpressionVisitor {
     @Override
     public void visit(DateTimeLiteral arg0) {
         currentNode.data = arg0.getValue();
