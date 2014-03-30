@@ -48,13 +48,6 @@ public class MongodbDatasource implements Datasource {
         return null;
     }
 
-    public void closeMongo() {
-        if (_mongo != null) {
-            _mongo.close();
-            _mongo = null;
-        }
-    }
-
     public DB getDB() {
         if (_mongo == null) {
             _mongo = getMongo();
@@ -121,7 +114,7 @@ public class MongodbDatasource implements Datasource {
             jsonArray.put(dbObject);
         }
 
-        closeMongo();
+        close();
         return jsonArray;
     }
 
@@ -143,7 +136,7 @@ public class MongodbDatasource implements Datasource {
         if (writeResult.getError() != null) {
             thrownMongoException();
         }
-        closeMongo();
+        close();
         return objId;
     }
 
@@ -172,7 +165,7 @@ public class MongodbDatasource implements Datasource {
         if (writeResult.getError() != null) {
             thrownMongoException();
         }
-        closeMongo();
+        close();
         return objects;
     }
 
@@ -216,7 +209,7 @@ public class MongodbDatasource implements Datasource {
         } else {
             thrownMongoException();
         }
-        closeMongo();
+        close();
         return result;
     }
 
@@ -250,7 +243,20 @@ public class MongodbDatasource implements Datasource {
         } else {
             thrownMongoException();
         }
-        closeMongo();
+        close();
         return result;
+    }
+
+    @Override
+    public void flush() {
+
+    }
+
+    @Override
+    public void close() {
+        if (_mongo != null) {
+            _mongo.close();
+            _mongo = null;
+        }
     }
 }

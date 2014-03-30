@@ -19,4 +19,8 @@ public interface Datasource {
     public int update(String modelName, JSONObject queryParameters, JSONObject entry);
 
     public int delete(String modelName, JSONObject queryParameters);
+
+    public void flush();
+
+    public void close();
 }

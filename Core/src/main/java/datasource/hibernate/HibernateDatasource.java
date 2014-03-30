@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class HibernateDatasource implements Datasource {
 
+    private Session session;
+
     private void thrownHibernateException() {
 
     }
@@ -82,7 +84,7 @@ public class HibernateDatasource implements Datasource {
 
     @Override
     public Object create(String modelName, JSONObject entry) {
-        Session session = datasource.hibernate.HibernateUtil.getSessionFactory().openSession();
+        Session session = getSession();
         Object id = session.save(modelName, entry.getMap());
 
         session.flush();
@@ -93,7 +95,7 @@ public class HibernateDatasource implements Datasource {
     @Override
     public Object[] create(String modelName, JSONArray entries) {
         Object[] objects = new Object[entries.length()];
-        Session session = datasource.hibernate.HibernateUtil.getSessionFactory().openSession();
+        Session session = getSession();
 
         Transaction tx = session.beginTransaction();
         for (int i = 0; i < entries.length(); i++) {
@@ -115,6 +117,14 @@ public class HibernateDatasource implements Datasource {
         return objects;
     }
 
+    public Session getSession() {
+        if (session == null || !session.isOpen()) {
+            this.session = datasource.hibernate.HibernateUtil.getSessionFactory().openSession();
+            return session;
+        }
+        return this.session;
+    }
+
     @Override
     public int update(String modelName, JSONObject queryParameters, JSONObject entry) {
         return 0;
@@ -123,5 +133,19 @@ public class HibernateDatasource implements Datasource {
     @Override
     public int delete(String modelName, JSONObject queryParameters) {
         return 0;
+    }
+
+    @Override
+    public void flush() {
+        if (session != null) {
+            session.flush();
+        }
+    }
+
+    @Override
+    public void close() {
+        if (session != null) {
+            session.close();
+        }
     }
 }
