@@ -3,17 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Core</artifactId>
+    <artifactId>ODataTransformer-Core</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>cynric.shu.ODataTransformer</groupId>
-        <artifactId>ODataTransformer</artifactId>
+        <groupId>com.cynricshu</groupId>
+        <artifactId>ODataTransformer-Parent</artifactId>
         <version>1.0</version>
     </parent>
 
-    <name>Core</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
