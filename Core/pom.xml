@@ -4,16 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ODataTransformer-Core</artifactId>
-    <version>1.0</version>
     <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
 
     <parent>
         <groupId>com.cynricshu</groupId>
         <artifactId>ODataTransformer-Parent</artifactId>
         <version>1.0</version>
     </parent>
-
-    <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>
