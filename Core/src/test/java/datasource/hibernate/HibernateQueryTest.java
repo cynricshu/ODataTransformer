@@ -1,5 +1,6 @@
 package datasource.hibernate;
 
+import datasource.TestFilterString;
 import org.junit.Test;
 import util.json.JSONArray;
 import util.json.JSONException;
@@ -34,7 +35,7 @@ public class HibernateQueryTest extends HibernateTest {
 
     @Test
     public void testEq() throws Exception {
-        String filterString = "Name eq 'Cynric'";
+        String filterString = TestFilterString.EQ.toString();
         System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -49,7 +50,7 @@ public class HibernateQueryTest extends HibernateTest {
 
     @Test
     public void testGe() throws Exception {
-        String filterString = "Age ge 22";
+        String filterString = TestFilterString.GE.toString();
         System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -64,7 +65,7 @@ public class HibernateQueryTest extends HibernateTest {
 
     @Test
     public void testAnd() throws Exception {
-        String filterString = "Age ge 22 and BirthDate eq '1992-03-22 19:46:40.0'";
+        String filterString = TestFilterString.AND.toString();
         System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -95,7 +96,7 @@ public class HibernateQueryTest extends HibernateTest {
 
     @Test
     public void testNot() throws Exception {
-        String filterString = "not Age ge 22 or Name eq 'Cynric'";
+        String filterString = TestFilterString.NOT.toString();
         System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -110,7 +111,7 @@ public class HibernateQueryTest extends HibernateTest {
 
     @Test
     public void testNot2() throws Exception {
-        String filterString = "not (Age ge 50 or Name ne 'Cynric')";
+        String filterString = TestFilterString.NOT2.toString();
         System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -273,24 +274,24 @@ public class HibernateQueryTest extends HibernateTest {
         System.out.println("Test Pass for Hibernate$filter: " + filterString);
     }
 
-    @Test
-    public void testReplace() throws Exception {
-        String filterString = "replace(Name, 'C', 'c') eq 'cynric'";
-        System.out.println("Test start for Hibernate$filter: " + filterString);
-
-        JSONArray resultList = getResult(filterString);
-        assertTrue("no match result entity!", resultList.length() > 0);
-
-        for (int i = 0; i < resultList.length(); i++) {
-            Map entity = (Map) resultList.get(i);
-            assertTrue(entity.get("Name").toString().equals("Cynric"));
-        }
-        System.out.println("Test Pass for Hibernate$filter: " + filterString);
-    }
+//    @Test
+//    public void testReplace() throws Exception {
+//        String filterString = "replace(Name, 'C', 'c') eq 'cynric'";
+//        System.out.println("Test start for Hibernate$filter: " + filterString);
+//
+//        JSONArray resultList = getResult(filterString);
+//        assertTrue("no match result entity!", resultList.length() > 0);
+//
+//        for (int i = 0; i < resultList.length(); i++) {
+//            Map entity = (Map) resultList.get(i);
+//            assertTrue(entity.get("Name").toString().equals("Cynric"));
+//        }
+//        System.out.println("Test Pass for Hibernate$filter: " + filterString);
+//    }
 
     @Test
     public void testSubstring() throws Exception {
-        String filterString = "substring(Name, 0, 2) eq 'Cy'";
+        String filterString = TestFilterString.SUBSTRING3.toString();
         System.out.println("Test start for Hibernate$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -298,7 +299,7 @@ public class HibernateQueryTest extends HibernateTest {
 
         for (int i = 0; i < resultList.length(); i++) {
             Map entity = (Map) resultList.get(i);
-            assertTrue(entity.get("Name").toString().substring(0, 2).equals("Cy"));
+            assertTrue(entity.get("Name").toString().substring(1, 3).equals("yn"));
         }
         System.out.println("Test Pass for Hibernate$filter: " + filterString);
     }

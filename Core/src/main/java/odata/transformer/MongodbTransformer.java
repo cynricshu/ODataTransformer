@@ -1,7 +1,9 @@
 package odata.transformer;
 
 import com.mongodb.BasicDBObject;
+import odata.expressionvisitor.CommonExpressionVisitor;
 import odata.expressionvisitor.MongodbExpressionVisitor;
+import odata.generator.Generator;
 import odata.generator.MongodbQueryGenerator;
 import org.odata4j.expression.CommonExpression;
 import org.odata4j.expression.ExpressionParser;
@@ -11,23 +13,20 @@ import org.odata4j.expression.ExpressionParser;
  * Date: 14-3-4
  * Time: 9:37
  */
-public class MongodbTransformer implements DataTransformer {
+public class MongodbTransformer extends DataTransformer {
 
     @Override
     public BasicDBObject transform(String inputData, Object[] params) {
         CommonExpression expression = ExpressionParser.parse(inputData);
-        MongodbExpressionVisitor visitor = new MongodbExpressionVisitor();
+        CommonExpressionVisitor visitor = new MongodbExpressionVisitor();
         expression.visit(visitor);
 
-        BasicDBObject mongoDBQuery = new MongodbQueryGenerator().generateMongoDBQuery(visitor.getAST());
+        Generator gen = new MongodbQueryGenerator();
+        BasicDBObject mongoDBQuery = (BasicDBObject) gen.generateQueryString(visitor.getAST().root);
         System.out.println(mongoDBQuery);
         return mongoDBQuery;
     }
 
-    @Override
-    public String getSourceTypeName() {
-        return "ODataFilter";
-    }
 
     @Override
     public String getDistTypeName() {

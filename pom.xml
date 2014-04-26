@@ -16,6 +16,8 @@
 
     <modules>
         <module>Core</module>
+        <module>API</module>
+        <module>Sample</module>
     </modules>
 
     <dependencyManagement>
@@ -45,6 +47,26 @@
             </dependency>
 
             <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>2.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.11</version>
@@ -62,6 +84,7 @@
                     <source>7</source>
                     <target>7</target>
                 </configuration>
+                <version>2.5.1</version>
             </plugin>
         </plugins>
     </build>

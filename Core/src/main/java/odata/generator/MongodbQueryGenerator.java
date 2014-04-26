@@ -2,7 +2,6 @@ package odata.generator;
 
 import com.mongodb.BasicDBObject;
 import util.Node;
-import util.Tree;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
  * Date: 14-3-20
  * Time: 23:43
  */
-public class MongodbQueryGenerator {
+public class MongodbQueryGenerator extends Generator<BasicDBObject> {
     static final Map<String, Generator> generateMatchTable = new HashMap<>();
     BasicDBObject mongoDBQuery = new BasicDBObject();
 
@@ -66,14 +65,14 @@ public class MongodbQueryGenerator {
         }
     }
 
-    class rootLeft extends Generator {
+    class rootLeft extends Generator<String> {
         Map<String, String[]> replaceTable = new HashMap<>();
 
         public rootLeft() {
             replaceTable.put("ceiling", new String[]{"Math.ceil(", ")"});
             replaceTable.put("floor", new String[]{"Math.floor(", ")"});
             replaceTable.put("round", new String[]{"Math.round(", ")"});
-            replaceTable.put("not", new String[]{"!(", ")"});
+            replaceTable.put("not", new String[]{"!", ""});
         }
 
         @Override
@@ -94,7 +93,7 @@ public class MongodbQueryGenerator {
         }
     }
 
-    class leftRoot extends Generator {
+    class leftRoot extends Generator<String> {
         Map<String, String> replaceTable = new HashMap<>();
 
         public leftRoot() {
@@ -120,7 +119,7 @@ public class MongodbQueryGenerator {
 
     }
 
-    class leftRootRight extends Generator {
+    class leftRootRight extends Generator<String> {
         Map<String, String[]> replaceTable = new HashMap<>();
 
         public leftRootRight() {
@@ -141,17 +140,22 @@ public class MongodbQueryGenerator {
         }
     }
 
-    class simpleLeftRootRight extends Generator {
+    class simpleLeftRootRight extends Generator<String> {
         @Override
         public String generateQueryString(Node<Object> root) {
             String queryString;
-            queryString = generateMongoDBQuery(root.children.get(0)) + " " + root.data.toString()
-                    + " " + generateMongoDBQuery(root.children.get(1));
+            if (root.children.get(1).data.toString().startsWith("ISODate")) {
+                queryString = generateMongoDBQuery(root.children.get(0)) + " - " + generateMongoDBQuery(
+                        root.children.get(1)) + root.data.toString() + " 0";
+            } else {
+                queryString = generateMongoDBQuery(root.children.get(0)) + " " + root.data.toString()
+                        + " " + generateMongoDBQuery(root.children.get(1));
+            }
             return queryString;
         }
     }
 
-    class RightRootLeft extends Generator {
+    class RightRootLeft extends Generator<String> {
         Map<String, String[]> replaceTable = new HashMap<>();
 
         public RightRootLeft() {
@@ -168,7 +172,7 @@ public class MongodbQueryGenerator {
         }
     }
 
-    class endsWith extends Generator {
+    class endsWith extends Generator<String> {
         Map<String, String[]> replaceTable = new HashMap<>();
 
         public endsWith() {
@@ -186,11 +190,11 @@ public class MongodbQueryGenerator {
         }
     }
 
-    class leftRootRightThreeParameters extends Generator {
+    class leftRootRightThreeParameters extends Generator<String> {
         Map<String, String[]> replaceTable = new HashMap<>();
 
         public leftRootRightThreeParameters() {
-            replaceTable.put("substring", new String[]{".substring(", ",", ")"});
+            replaceTable.put("substring", new String[]{".substr(", ",", ")"});
             replaceTable.put("replace", new String[]{".replace(", ",", ")"});
         }
 
@@ -199,14 +203,15 @@ public class MongodbQueryGenerator {
             String[] parameters = replaceTable.get(root.data.toString());
             String queryString = generateMongoDBQuery(root.children.get(0)) + parameters[0]
                     + generateMongoDBQuery(root.children.get(1))
-                    + parameters[1] + generateMongoDBQuery(root.children.get(2)) + parameters[2];
+                    + parameters[1] + generateMongoDBQuery(root.children.get(2))
+                    + parameters[2];
             return queryString;
         }
     }
 
     String generateMongoDBQuery(Node<Object> root) {
         String rootDataValue = root.data.toString();
-        Generator gen;
+        Generator<String> gen;
         if (rootDataValue.equals("substring")) {
             String childrenNum = Integer.toString(root.children.size());
             gen = generateMatchTable.get(rootDataValue + childrenNum);
@@ -221,8 +226,8 @@ public class MongodbQueryGenerator {
         }
     }
 
-    public BasicDBObject generateMongoDBQuery(Tree AST) {
-        String finString = generateMongoDBQuery(AST.root);
+    public BasicDBObject generateQueryString(Node<Object> root) {
+        String finString = generateMongoDBQuery(root);
         mongoDBQuery.append("$where", finString);
         return mongoDBQuery;
     }

@@ -8,32 +8,29 @@
     <session-factory>
 
         <!-- Database connection settings -->
-        <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mariadb://localhost:3306/transformer</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">root</property>
+        <!--<property name="connection.driver_class">org.mariadb.jdbc.Driver</property>-->
+        <!--<property name="connection.url">jdbc:mariadb://localhost:3306/transformer</property>-->
+        <!--<property name="connection.username">root</property>-->
+        <!--<property name="connection.password">root</property>-->
+        <!--<property name="connection.datasource">BasicDataSource</property>-->
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">10</property>
+        <!--<property name="connection.pool_size">10</property>-->
 
-        <property name="hibernate.jdbc.batch_size">20</property>
+        <!--<property name="hibernate.jdbc.batch_size">20</property>-->
 
         <!-- SQL dialect -->
         <property name="dialect">datasource.hibernate.MySQL5Dialect</property>
 
         <!-- Enable Hibernate's automatic session context management -->
-        <property name="current_session_context_class">thread</property>
+        <!--<property name="current_session_context_class">thread</property>-->
 
-        <!-- Disable the second-level cache  -->
-        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider
-        </property>
+        <!--&lt;!&ndash; Disable the second-level cache  &ndash;&gt;-->
+        <!--<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider-->
+        <!--</property>-->
 
-        <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">false</property>
-
-        <!-- Drop and re-create the database schema on startup -->
         <!--<property name="hbm2ddl.auto">create</property>-->
-
         <mapping resource="mapping/People.hbm.xml"/>
 
     </session-factory>

@@ -1,5 +1,7 @@
 package odata.expressionvisitor;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.odata4j.expression.*;
 import org.odata4j.repack.org.apache.commons.codec.binary.Hex;
 import util.Node;
@@ -12,6 +14,7 @@ import util.Tree;
  */
 public class CommonExpressionVisitor implements org.odata4j.expression.ExpressionVisitor {
 
+    static DateTimeFormatter m_DateTimeParser = ISODateTimeFormat.dateTime();
     Tree<Object> AST = new Tree("");
     Node<Object> currentNode = AST.root;
 
@@ -76,7 +79,7 @@ public class CommonExpressionVisitor implements org.odata4j.expression.Expressio
 
     @Override
     public void visit(DateTimeLiteral arg0) {
-        currentNode.data = "'" + arg0.getValue() + "'";
+        currentNode.data = "'" + m_DateTimeParser.parseDateTime(arg0.getValue().toString() + "Z").toString() + "'";
     }
 
     @Override

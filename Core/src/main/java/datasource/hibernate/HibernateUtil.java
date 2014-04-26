@@ -9,6 +9,7 @@ package datasource.hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
@@ -19,6 +20,8 @@ public class HibernateUtil {
 
         try {
             Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+            configuration.getProperties().put(Environment.DATASOURCE, new BasicDataSource());
+
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties())
                     .build();

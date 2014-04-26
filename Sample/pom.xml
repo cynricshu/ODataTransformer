@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ODataTransformer-Parent</artifactId>
+        <groupId>com.cynricshu</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ODataTransformer-Sample</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cynricshu</groupId>
+            <artifactId>ODataTransformer-Core</artifactId>
+            <scope>compile</scope>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 更改maven默认的打包目录：将class文件和lib目录打包放到指定的目录 -->
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webappDirectory>${basedir}/src/main/web</webappDirectory>
+                    <warSourceDirectory>${basedir}/src/main/web</warSourceDirectory>
+                </configuration>
+                <version>2.1.1</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

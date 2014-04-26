@@ -1,11 +1,6 @@
 package odata.expressionvisitor;
 
-import org.odata4j.expression.AndExpression;
-import org.odata4j.expression.DateTimeLiteral;
-import org.odata4j.expression.DateTimeOffsetLiteral;
-import org.odata4j.expression.EntitySimpleProperty;
-import org.odata4j.expression.EqExpression;
-import org.odata4j.expression.OrExpression;
+import org.odata4j.expression.*;
 
 /**
  * User: Cynric
@@ -15,7 +10,7 @@ import org.odata4j.expression.OrExpression;
 public class MongodbExpressionVisitor extends CommonExpressionVisitor {
     @Override
     public void visit(DateTimeLiteral arg0) {
-        currentNode.data = arg0.getValue();
+        currentNode.data = "ISODate('" + arg0.getValue().toString() + "')";
     }
 
     @Override

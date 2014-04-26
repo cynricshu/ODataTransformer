@@ -1,12 +1,15 @@
 package datasource.mongodb;
 
 import com.mongodb.BasicDBObject;
+import datasource.TestFilterString;
 import org.junit.Test;
+import util.GenData;
 import util.json.JSONArray;
 import util.json.JSONException;
 import util.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -33,7 +36,7 @@ public class MongoQueryTest extends MongoTest {
 
     @Test
     public void testEq() throws Exception {
-        String filterString = "Name eq 'Cynric'";
+        String filterString = TestFilterString.EQ.toString();
         System.out.println("Test start for Mongo$filter: " + filterString);
 
 
@@ -49,7 +52,7 @@ public class MongoQueryTest extends MongoTest {
 
     @Test
     public void testGe() throws Exception {
-        String filterString = "Age ge 22";
+        String filterString = TestFilterString.GE.toString();
         System.out.println("Test start for Mongo$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -64,7 +67,7 @@ public class MongoQueryTest extends MongoTest {
 
     @Test
     public void testAnd() throws Exception {
-        String filterString = "Age ge 22 and Name eq 'Cynric'";
+        String filterString = TestFilterString.AND.toString();
         System.out.println("Test start for Mongo$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -72,7 +75,8 @@ public class MongoQueryTest extends MongoTest {
 
         for (int i = 0; i < resultList.length(); i++) {
             BasicDBObject entity = (BasicDBObject) resultList.get(i);
-            assertTrue(entity.getInt("Age") >= 22 && entity.getString("Name").equals("Cynric"));
+            Date date = (Date) entity.get("BirthDate");
+            assertTrue(entity.getInt("Age") >= 22 && date.compareTo(GenData._formater.parse("1992-03-22 19:46:40")) == 0);
         }
         System.out.println("Test Pass for Mongo$filter: " + filterString);
     }
@@ -94,7 +98,7 @@ public class MongoQueryTest extends MongoTest {
 
     @Test
     public void testNot() throws Exception {
-        String filterString = "not Age ge 22 or Name eq 'Cynric'";
+        String filterString = TestFilterString.NOT.toString();
         System.out.println("Test start for Mongo$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -109,7 +113,7 @@ public class MongoQueryTest extends MongoTest {
 
     @Test
     public void testNot2() throws Exception {
-        String filterString = "not (Age ge 50 or Name ne 'Cynric')";
+        String filterString = TestFilterString.NOT2.toString();
         System.out.println("Test start for Mongo$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -272,24 +276,24 @@ public class MongoQueryTest extends MongoTest {
         System.out.println("Test Pass for Mongo$filter: " + filterString);
     }
 
-    @Test
-    public void testReplace() throws Exception {
-        String filterString = "replace(Name, 'C', 'c') eq 'cynric'";
-        System.out.println("Test start for Mongo$filter: " + filterString);
-
-        JSONArray resultList = getResult(filterString);
-        assertTrue("no match result entity!", resultList.length() > 0);
-
-        for (int i = 0; i < resultList.length(); i++) {
-            BasicDBObject entity = (BasicDBObject) resultList.get(i);
-            assertTrue(entity.getString("Name").equals("Cynric"));
-        }
-        System.out.println("Test Pass for Mongo$filter: " + filterString);
-    }
+//    @Test
+//    public void testReplace() throws Exception {
+//        String filterString = "replace(Name, 'C', 'c') eq 'cynric'";
+//        System.out.println("Test start for Mongo$filter: " + filterString);
+//
+//        JSONArray resultList = getResult(filterString);
+//        assertTrue("no match result entity!", resultList.length() > 0);
+//
+//        for (int i = 0; i < resultList.length(); i++) {
+//            BasicDBObject entity = (BasicDBObject) resultList.get(i);
+//            assertTrue(entity.getString("Name").equals("Cynric"));
+//        }
+//        System.out.println("Test Pass for Mongo$filter: " + filterString);
+//    }
 
     @Test
     public void testSubstring() throws Exception {
-        String filterString = "substring(Name, 0, 2) eq 'Cy'";
+        String filterString = TestFilterString.SUBSTRING3.toString();
         System.out.println("Test start for Mongo$filter: " + filterString);
 
         JSONArray resultList = getResult(filterString);
@@ -297,7 +301,7 @@ public class MongoQueryTest extends MongoTest {
 
         for (int i = 0; i < resultList.length(); i++) {
             BasicDBObject entity = (BasicDBObject) resultList.get(i);
-            assertTrue(entity.getString("Name").substring(0, 2).equals("Cy"));
+            assertTrue(entity.getString("Name").substring(1, 3).equals("yn"));
         }
         System.out.println("Test Pass for Mongo$filter: " + filterString);
     }

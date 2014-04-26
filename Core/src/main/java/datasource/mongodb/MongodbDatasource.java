@@ -1,13 +1,6 @@
 package datasource.mongodb;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.WriteConcern;
-import com.mongodb.WriteResult;
+import com.mongodb.*;
 import datasource.Datasource;
 import odata.transformer.DataTransformer;
 import odata.transformer.MongodbTransformer;

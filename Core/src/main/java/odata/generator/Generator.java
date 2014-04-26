@@ -8,7 +8,7 @@ import util.Node;
  * Time: 14:42
  */
 
-public abstract class Generator {
-    public abstract String generateQueryString(Node<Object> root);
+public abstract class Generator<T extends Object> {
+    public abstract T generateQueryString(Node<Object> root);
 
 }
